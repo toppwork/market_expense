@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<odoo>
+    <!-- Agent Reimbursement Tree view -->
+    <record id="hhexpense_agent_reimbursement_view_tree" model="ir.ui.view">
+        <field name="name">hhexpense.agent.reimbursement.tree</field>
+        <field name="model">hhexpense.agent.reimbursement</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+                <field name="agent"/>
+            </tree>
+        </field>
+    </record>
+
+    <menuitem id="hhexpense_menu_config" name="Configuration" sequence="16" parent="hhexpense_menu_root" groups="hhexpense.group_hhexpense_admin"/>
+
+    <record id="hhexpense_agent_reimbursement_action" model="ir.actions.act_window">
+        <field name="name">Agent Reimbursement Mapping</field>
+        <field name="res_model">hhexpense.agent.reimbursement</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <menuitem id="hhexpense_agent_reimbursement_menu" name="Agent Reimbursement" sequence="10" parent="hhexpense_menu_config" action="hhexpense_agent_reimbursement_action"/>
+
+</odoo>
+

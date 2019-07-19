@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_product_hhexpense_form_view" model="ir.ui.view">
+        <field name="name">product.product.hhexpense.form</field>
+        <field name="model">product.product</field>
+        <field name="arch" type="xml">
+            <form string="E-Expense Products">
+                <sheet>
+                    <field name='product_variant_count' invisible='1'/>
+                    <field name="id" invisible="True"/>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object"
+                                class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button"
+                                options='{"terminology": "archive"}'/>
+                        </button>
+                    </div>
+                    <field name="image_medium" widget="image" class="oe_avatar"/>
+                    <div class="oe_title">
+                        <label class="oe_edit_only" for="name" string="Product Name"/>
+                        <h1><field name="name" placeholder="e.g. Lunch"/></h1>
+                        <div name="options" groups="base.group_user" invisible="1">
+                            <div>
+                                <field name="can_be_hhexpensed"/>
+                                <label for="can_be_hhexpensed"/>
+                            </div>
+                        </div>
+                    </div>
+                    <group name="product_details">
+                        <group string="General Information">
+                            <field name="type"/>
+                            <field name="list_price"/>
+                            <field name="standard_price"/>
+                            <field name="uom_id" groups="product.group_uom" options="{'no_create': True}"/>
+                            <field name="uom_po_id" invisible="1"/>
+                            <label for="default_code"/>
+                            <div>
+                                <field name="default_code"/>
+                                <i class="text-muted oe_edit_only">Use [Reference] as a subject prefix for incoming receipts</i>
+                            </div>
+                        </group>
+                        <group string="Accounting">
+                            <field name="property_account_expense_id" groups="hhexpense.group_hhexpense_accountant"/>
+                            <field name="supplier_taxes_id" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="hhexpense_product" model="ir.actions.act_window">
+            <field name="name">E-Expense Products</field>
+            <field name="res_model">product.product</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{"default_can_be_hhexpensed": 1, 'default_type': 'service'}</field>
+            <field name="domain">[('can_be_hhexpensed', '=', True)]</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a new expense category.
+              </p>
+            </field>
+        </record>
+
+    <record id="hhexpense_product_tree" model="ir.actions.act_window.view">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="hhexpense_product"/>
+        </record>
+
+    <record id="hhexpense_product_kanban" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">kanban</field>
+        <field name="act_window_id" ref="hhexpense_product"/>
+    </record>
+
+    <record id="hhexpense_product_form" model="ir.actions.act_window.view">
+        <field name="sequence" eval="3"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="product_product_hhexpense_form_view"/>
+        <field name="act_window_id" ref="hhexpense_product"/>
+    </record>
+
+    <menuitem id="menu_hhexpense_product" name="E-Expense Products" parent="hhexpense.hhexpense_menu_config"
+            action="hhexpense_product" groups="hhexpense.group_hhexpense_admin" sequence="1"/>
+</odoo>

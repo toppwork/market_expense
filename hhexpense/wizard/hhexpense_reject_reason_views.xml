@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hhexpense_reject_wizard_view_form" model="ir.ui.view">
+        <field name="name">hhexpense.reject.wizard.form</field>
+        <field name="model">hhexpense.reject.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Expense reject reason">
+                <group>
+                    <field name="manager_reject_reason" groups="hhexpense.group_hhexpense_manager"/>
+                </group>
+                <footer>
+                    <button string='Reject' name="reject_expense" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+           </form>
+        </field>
+    </record>
+
+    <record id="hhexpense_reject_wizard_action" model="ir.actions.act_window">
+        <field name="name">Reject Expense</field>
+        <field name="res_model">hhexpense.reject.wizard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="hhexpense_reject_wizard_view_form"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

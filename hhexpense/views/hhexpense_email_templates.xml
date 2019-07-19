@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- user case 1 -->
+        <record id="mail_template_submitted_expense" model="mail.template">
+            <field name="name">hhexpense - Submit expense</field>
+            <field name="model_id" ref="hhexpense.model_hhexpense_hhexpense"/>
+            <field name="auto_delete" eval="False"/>
+            <field name="email_from">${(object.company_id and object.company_id.email or '') | safe}</field>
+            <field name="email_to">${object.employee_id.parent_id.work_email | safe}</field>
+            <field name="subject">${(object.employee_name)} has submitted an expense</field>
+            <field name="lang">${object.lang}</field>
+            <field name="body_html">
+                <![CDATA[
+                    <head>
+                        <img src="/logo.png" style="padding: 0px; margin: 0px; height: auto; width: 250px;" alt="${user.company_id.name}">
+
+                    </head>
+                    <body>
+                        <div>
+                            <hr>
+                            <p>Dear Manager,</p>
+                            %if (object.claim_as_agent):
+                            <p>${(object.employee_name)} has <strong style="text-transform: uppercase">${object.state}</strong> a new expense for ${(object.expense_belongs_to_employee)}:</p>
+                            %else:
+                            <p>${(object.employee_name)} has <strong style="text-transform: uppercase">${object.state}</strong> a new expense:</p>
+                            %endif
+                            <p><strong>"${object.name}"</strong></p>
+                            <p>Please <a href=${object.to_approve_url}>login</a> to the e-Expense system to view the details.</p>
+                            <p>Thank you for your attention.</p>
+                            <br/>
+                            <hr>
+                        </div>
+                    </body>
+                    <footer>
+                        <div style="font-size:13px; color:#999999;">
+                            * This is a system-generated message, please do not reply. For enquiries, contact
+                            XXX (XXX's Email) / ext.(phone number) --- submitted email
+                        </div>
+                    </footer>
+                ]]>
+            </field>
+        </record>
+
+        <!-- user case 2 -->
+        <record id="mail_template_approved_expense" model="mail.template">
+            <field name="name">hhexpense - Approved expense</field>
+            <field name="model_id" ref="hhexpense.model_hhexpense_hhexpense"/>
+            <field name="auto_delete" eval="False"/>
+            <field name="email_from">${(object.company_id and object.company_id.email or '') | safe}</field>
+            <field name="email_to">${(object.employee_id.work_email) | safe}</field>
+            <field name="subject">Your expense "${(object.name)}" has been Approved</field>
+            <field name="lang">${object.lang}</field>
+            <field name="body_html">
+                <![CDATA[
+                    <head>
+                        <img src="/logo.png" style="padding: 0px; margin: 0px; height: auto; width: 250px;" alt="${user.company_id.name}">
+                    </head>
+                    <body>
+                        <div>
+                            <hr>
+                            <p>Dear ${(object.employee_name)},</p>
+                            <p>${(object.rec_approver_name)} has <strong style="text-transform: uppercase">${object.state}</strong> the below expense:</p>
+                            <p><strong>"${object.name}"</strong></p>
+                            <p>Please <a href=${object.approved_url}>login</a> to the e-Expense system to view the details.</p>
+                            <p>(Customized message for payment period) Please allow 3-5 business days for processing, your payment will be disbursed to your account on either 15th or the 30th of each month.</p>
+                            <p>Thank you for your attention.</p>
+                            <br/>
+                            <hr>
+                        </div>
+                    </body>
+                    <footer>
+                        <div style="font-size:13px; color:#999999;">
+                            * This is a system-generated message, please do not reply. For enquiries, contact
+                            XXX (XXX's Email) / ext.(phone number) --- approved email
+                        </div>
+                    </footer>
+                ]]>
+            </field>
+        </record>
+
+        <!-- user case 3 & 4 -->
+        <record id="mail_template_reject_expense" model="mail.template">
+            <field name="name">hhexpense - Reject expense</field>
+            <field name="model_id" ref="hhexpense.model_hhexpense_hhexpense"/>
+            <field name="auto_delete" eval="False"/>
+            <field name="email_from">${(object.company_id and object.company_id.email or '') | safe}</field>
+            <field name="email_to">${(object.employee_id.work_email) | safe}</field>
+            <field name="subject">Your expense "${object.name}" has been rejected</field>
+            <field name="lang">${object.lang}</field>
+            <field name="body_html">
+                <![CDATA[
+                    <head>
+                        <img src="/logo.png" style="padding: 0px; margin: 0px; height: auto; width: 250px;" alt="${user.company_id.name}">
+                    </head>
+                    <body>
+                        <div>
+                            <hr>
+                            <p>Dear ${object.employee_name},</p>
+                            <p>
+                            <p>${object.env.user.name} has <strong style="text-transform: uppercase">${object.state}</strong>
+                            the below expense:</p>
+                            <p><strong>"${object.name}"</strong></p>
+                            <p>Reject Reason: <strong>"${object.reject_reason}"</strong></p>
+                            <p>Please <a href=${object.approved_url}>login</a> to the e-Expense system to view the details.</p>
+                            <p>Thank you for your attention.</p>
+                            <br/>
+                            <hr>
+                        </div>
+                    </body>
+                    <footer>
+                        <div style="font-size:13px; color:#999999;">
+                            * This is a system-generated message, please do not reply. For enquiries, contact
+                            XXX (XXX's Email) / ext.(phone number) --- rejected email
+                        </div>
+                    </footer>
+                ]]>
+            </field>
+        </record>
+    </data>
+</odoo>
+
+
+
+

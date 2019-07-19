@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Views(tree/form) @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+    <!-- Base tree view -->
+    <record id="hhexpense_view_tree" model="ir.ui.view">
+        <field name="name">hhexpense.hhexpense.view.tree</field>
+        <field name="model">hhexpense.hhexpense</field>
+        <field name="arch" type="xml">
+            <tree decoration-success="state=='approved'" decoration-bf="state!=''"
+                  decoration-danger="state=='rejected'"
+                  decoration-info="state=='done'" import="false">
+                <field name="attachment_num" invisible="1"/>
+                <field name="expense_num" groups="hhexpense.group_hhexpense_manager"/>
+                <field name="expense_create_date"/>
+                <field name="name"/>
+                <field name="employee_name"/>
+                <field name="expense_belongs_to_employee"/>
+                <field name="rec_approver_name"/>
+                <field name="state"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="calculate_total_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Base Form view -->
+    <record id="hhexpense_view_form" model="ir.ui.view">
+        <field name="name">hhexpense.hhexpense.view.form</field>
+        <field name="model">hhexpense.hhexpense</field>
+        <field name="arch" type="xml">
+            <form create="false">
+                <header>
+                    <field name="match_uid" invisible="1"/>
+                    <!--<button string="test" name="hhexpense_post_message"-->
+                            <!--type="object" class="oe_highlight o_expense_submit"/>-->
+                    <button string="Submit to Manager" name="submit_expense" states="draft"
+                            type="object" class="oe_highlight o_expense_submit"
+                            confirm="Your expense will be submitted to the manager. Do you want to proceed?"/>
+                    <button string="Resubmit" name="submit_expense" attrs="{'invisible': ['|', ('match_uid', '=', False), ('state', '!=', 'rejected')]}"
+                            type="object" class="oe_highlight o_expense_submit"
+                            confirm="Your expense will be resubmitted. Do you want to proceed?"
+                            groups="hhexpense.group_hhexpense_user"/>
+                    <button string="Manager Approve" name="approve_expense" attrs="{'invisible': [('state', '!=', 'submitted')]}"
+                            type="object" class="oe_highlight o_expense_sheet_approve" groups="hhexpense.group_hhexpense_manager"
+                            confirm="This expense will be approved. Do you want to proceed?"/>
+                    <button string="Reject" name="%(hhexpense.hhexpense_reject_wizard_action)d" attrs="{'invisible': [('state', '!=', 'submitted')]}"
+                            type="action" groups="hhexpense.group_hhexpense_manager"
+                            context="{'hhexpense_reject_model':'hhexpense.hhexpense'}"/>
+                    <button name="action_sheet_move_create" states="approved" string="Post Journal Entries" type="object" class="oe_highlight o_expense_sheet_post"
+                            groups="account.group_account_manager"/>
+                    <button name="%(hhexpense.hhexpense_register_payment_wizard_action)d" type="action" string="Register Payment"
+                            class="oe_highlight o_expense_sheet_pay" attrs="{'invisible': [('state', '!=', 'posted')]}"
+                            groups="account.group_account_manager"
+                            context="{'default_amount': calculate_total_amount, 'partner_id': address_id}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,approved,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Lunch with Customer"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="expense_create_date"/>
+                            <field name="employee_name"/>
+                            <field name="address_id" invisible="1"/>
+                            <field name="employee_department"/>
+                            <field name="calculate_total_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="confirm_invoice" invisible="1"/>
+                            <field name="expense_belongs_to_employee" invisible="1"/>
+                            <field name="claim_as_agent"/>
+                            <field name="agent_reimb_id"
+                                   attrs="{'invisible':[('claim_as_agent', '=', False)]}"
+                                   widget="selection"/>
+                        </group>
+                        <group>
+                            <field name="payment_mode" widget="radio"/>
+                            <field name="expense_num"/>
+                            <field name="rec_approver_name"/>
+                            <field name="reject_reason" style="font-weight:bold; color:red;" attrs="{'invisible':[('state', '!=', 'rejected')]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Expense Lines">
+                            <field name="expense_line">
+                            <form string="form view for line level date">
+                                <group>
+                                    <field name="expense_line_name"/>
+                                    <field name="expense_line_date"/>
+                                    <field name="currency_id"/>
+                                    <field name="confirm_item_invoice"/>
+                                    <field name="expense_line_cost" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                            </form>
+                            <tree string="default/tree/list view for line level's date" editable="bottom">
+                                <field name="date" invisible="1"/>
+                                <field name="expense_id" invisible="1"/>
+                                <field name="expense_line_name"/>
+                                <field name="product_id"/>
+                                <field name="account_id" invisible="1"/>
+                                <field name="expense_line_date"/>
+                                <field name="currency_id"/>
+                                <field name="confirm_item_invoice"/>
+                                <field name="expense_line_belongs_to_employee" invisible="1"/>
+                                <field name="state" invisible="1"/>
+                                <field name="expense_line_cost"  widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            </tree>
+                        </field>
+
+                        </page>
+                        <page string='Documents'>
+    						<field name="expense_attachment" mode="kanban">
+		                        <kanban quick_create="false" create="true" delete="true">
+		                            <field name="name"/>
+		                            <field name="id"/>
+		                            <field name="mimetype"/>
+		                            <templates>
+		                                <t t-name="kanban-box">
+                                            <div class="o_kanban_record_top">
+                                                <div class="attachment_content">
+                                                    <div class="attachment_name_bar">
+                                                        <p>
+                                                            <field name="name"/>
+                                                            <field name="mimetype" invisible="1"/>
+                                                            <field name="general_type" invisible="1"/>
+                                                        </p>
+                                                    </div>
+                                                    <div class="attachment_pic">
+                                                        <t t-if="record.general_type.value == 'image'">
+                                                            <img t-att-src="kanban_image('hhexpense.attachment', 'datas', record.id.raw_value)"
+                                                                 class="file_img"/>
+                                                        </t>
+                                                        <t t-if="record.general_type.value == 'pdf'">
+                                                            <img src="/hhexpense/static/src/img/pdf.png" class="pdf_file_type"/>
+                                                        </t>
+                                                        <t t-if="record.general_type.value == 'others'">
+                                                                <img src="/hhexpense/static/src/img/others.png" class="other_file_type"/>
+                                                            </t>
+                                                    </div>
+                                                    <div class="button_bar">
+                                                        <a t-if="read_only_mode" class="my_attachment_preview"  t-attf-class="o_form_uri o_field_widget"
+                                                           t-att-href="kanban_image('hhexpense.attachment', 'datas', record.id.raw_value)" t-att-target="'_blank' ">
+                                                            <img src="/hhexpense/static/src/img/preview2.png"
+                                                                 title="Preview this attachment" aria-hidden="true"></img>
+                                                        </a>
+                                                        <a t-if="read_only_mode" class="my_attachment_download"  t-attf-class="o_form_uri o_field_widget"
+                                                           t-att-data-id="kanban_image('hhexpense.attachment', 'datas', record.id.raw_value)" t-att-target="'_blank' "
+                                                           t-att-data-name="kanban_image('hhexpense.attachment', 'name', record.id.raw_value)"
+                                                           onclick="_onAttachmentDownloadImg(this)">
+                                                            <img src="/hhexpense/static/src/img/download1.png"
+                                                                 title="Download this attachment" aria-hidden="true"></img>
+                                                        </a>
+                                                        <a type="delete" class='my_attachment_delete' t-if="! read_only_mode">
+                                                            <img src="/hhexpense/static/src/img/delete.png" title="Delete this attachment" aria-hidden="true"></img>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+		                                </t>
+		                            </templates>
+		                        </kanban>
+		                    </field>
+    					</page>
+                        <page string="Other Info" states="approved,posted,done" groups="hhexpense.group_hhexpense_accountant">
+                            <group>
+                                <group>
+                                    <field name="journal_id" domain="[('type', '=', 'purchase')]" options="{'no_open': True, 'no_create': True}"
+                                           attrs="{'invisible': [('payment_mode', '!=', 'own_account')]}"/>
+                                    <field name="bank_journal_id" options="{'no_open': True, 'no_create': True}"
+                                           attrs="{'invisible': [('payment_mode', '!=', 'company_account')]}" domain="[('type', 'in', ['cash', 'bank'])]"/>
+                                    <field name="accounting_date"
+                                           attrs="{'invisible': [('state', 'not in', ['approved', 'posted', 'done'])]}"/>
+                                </group>
+                                <group>
+                                    <field name="account_move_id"
+                                           attrs="{'invisible': [('state', 'not in', ['posted', 'approved','done'])]}" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree view that disable "create" function -->
+    <record id="hhexpense_view_tree_no_create" model="ir.ui.view">
+        <field name="name">hhexpense.hhexpense.view.tree.no_create</field>
+        <field name="model">hhexpense.hhexpense</field>
+        <field name="inherit_id" ref="hhexpense_view_tree"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="create">false</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Form view that disable "edit" function -->
+    <record id="hhexpense_view_form_no_edit" model="ir.ui.view">
+        <field name="name">hhexpense.hhexpense.view.form.no_edit</field>
+        <field name="model">hhexpense.hhexpense</field>
+        <field name="inherit_id" ref="hhexpense_view_form"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position='attributes'>
+                <attribute name="edit">false</attribute>
+                <attribute name="delete">false</attribute>
+            </xpath>
+        </field>
+    </record>
+
+<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Search view @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+    <record id="view_approve_expenses_filter" model="ir.ui.view">
+        <field name="name">hhexpense.hhexpense.approve.search</field>
+        <field name="model">hhexpense.hhexpense</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_name"/>
+                <field name="name"/>
+                <filter name="submitted_expense" string="Submitted Expenses" domain="[('state', '=', 'submitted')]"/>
+                <filter name="approved_expense" string="Approved Expenses" domain="[('state', '=', 'approved')]"/>
+                <filter name="posted_expense" string="Posted Expenses" domain="[('state', '=', 'posted')]"/>
+                <filter name="paid_expense" string="Paid Expenses" domain="[('state', '=', 'done')]"/>
+            </search>
+         </field>
+    </record>
+
+    <record id="view_historical_expenses_filter" model="ir.ui.view">
+        <field name="name">hhexpense.hhexpense.history.search</field>
+        <field name="model">hhexpense.hhexpense</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_name"/>
+                <field name="name"/>
+                <field name="expense_num"/>
+            </search>
+         </field>
+    </record>
+
+<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Action and Menuitem @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+    <menuitem id="hhexpense_menu_root" name="E-Expense(HH)" sequence="1" web_icon="hhexpense,static/description/B.PNG"/>
+
+    <!-- Action for menu "Submit expenses" -->
+    <record id="hhexpense_action_expenses" model="ir.actions.act_window">
+        <field name="name">My Expenses</field>
+        <field name="res_model">hhexpense.hhexpense</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('employee_id.user_id', '=', uid)]</field>
+    </record>
+
+    <record id="submit_view_specification_tree" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="hhexpense_view_tree"/>
+        <field name="act_window_id" ref="hhexpense_action_expenses"/>
+    </record>
+
+    <record id="submit_view_specification_form" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="hhexpense_view_form"/>
+        <field name="act_window_id" ref="hhexpense_action_expenses"/>
+    </record>
+
+    <menuitem id="hhexpense_menu_submit_expenses" name="My Expenses" sequence="2" parent="hhexpense.hhexpense_menu_root" action="hhexpense_action_expenses" groups="hhexpense.group_hhexpense_user"/>
+
+    <!-- Action for menu "Approve expenses" -->
+    <record id="hhexpense_action_approve_expenses" model="ir.actions.act_window">
+        <field name="name">Expenses to Approve</field>
+        <field name="res_model">hhexpense.hhexpense</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', 'in', ['submitted','approved'])]</field>
+        <field name="context">{'search_default_submitted_expense': 1}</field>
+        <field name="search_view_id" ref="view_approve_expenses_filter"/>
+        <field name="help" type="html">
+          <p>
+            There is no expense needs approval for now.
+          </p>
+        </field>
+    </record>
+
+    <record id="approve_view_specification_tree" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="hhexpense_view_tree_no_create"/>
+        <field name="act_window_id" ref="hhexpense_action_approve_expenses"/>
+    </record>
+
+    <record id="approve_view_specification_form" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="hhexpense_view_form_no_edit"/>
+        <field name="act_window_id" ref="hhexpense_action_approve_expenses"/>
+    </record>
+
+    <menuitem id="hhexpense_menu_approve_expenses" name="Approve Expenses" sequence="3" parent="hhexpense.hhexpense_menu_root" action="hhexpense_action_approve_expenses" groups="hhexpense.group_hhexpense_manager"/>
+
+    <!-- Action for menu "Expense History(manager)" -->
+    <record id="hhexpense_action_manager_expense_history" model="ir.actions.act_window">
+        <field name="name">Approval History</field>
+        <field name="res_model">hhexpense.hhexpense</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', 'not in', ['draft', 'submitted'])]</field>
+        <field name="context">{'search_default_group_submitted_expense': 1}</field>
+        <field name="search_view_id" ref="view_historical_expenses_filter"/>
+        <field name="help" type="html">
+          <p>
+            There is no approved expense history for now.
+          </p>
+        </field>
+    </record>
+
+    <record id="manager_expense_history_view_specification_tree" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="hhexpense_view_tree_no_create"/>
+        <field name="act_window_id" ref="hhexpense_action_manager_expense_history"/>
+    </record>
+
+    <record id="manager_expense_history_view_specification_form" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="hhexpense_view_form_no_edit"/>
+        <field name="act_window_id" ref="hhexpense_action_manager_expense_history"/>
+    </record>
+
+    <menuitem id="hhexpense_menu_manager_expense_history" name="Approval History" sequence="4" parent="hhexpense.hhexpense_menu_root" action="hhexpense_action_manager_expense_history" groups="hhexpense.group_hhexpense_manager"/>
+
+    <!-- Action for menu "All expenses" -->
+    <record id="hhexpense_action_posted_expenses" model="ir.actions.act_window">
+        <field name="name">Expenses</field>
+        <field name="res_model">hhexpense.hhexpense</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="posted_expenses_view_specification_tree" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="hhexpense_view_tree_no_create"/>
+        <field name="act_window_id" ref="hhexpense_action_posted_expenses"/>
+    </record>
+
+    <record id="posted_expenses_view_specification_form" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="hhexpense_view_form_no_edit"/>
+        <field name="act_window_id" ref="hhexpense_action_posted_expenses"/>
+    </record>
+
+    <menuitem id="hhexpense_menu_posted_expenses" name="All Expenses" sequence="12" parent="hhexpense.hhexpense_menu_root"
+              action="hhexpense_action_posted_expenses" groups="hhexpense.group_hhexpense_admin"/>
+
+    <!-- Action for menu "Accountant" -->
+    <record id="action_hhexpense_all_to_post" model="ir.actions.act_window">
+        <field name="name">Expenses to Post</field>
+        <field name="res_model">hhexpense.hhexpense</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', '=', 'approved')]</field>
+        <field name="help" type="html">
+          <p>
+            There is no expense needs to be posted for now.
+          </p>
+        </field>
+    </record>
+    <record id="action_hhexpense_all_to_pay" model="ir.actions.act_window">
+        <field name="name">Expenses to Pay</field>
+        <field name="res_model">hhexpense.hhexpense</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', '=', 'posted')]</field>
+        <field name="help" type="html">
+          <p>
+            There is no expense needs payment for now.
+          </p>
+        </field>
+    </record>
+
+    <record id="hhexpense_all_to_post_view_tree" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="hhexpense_view_tree_no_create"/>
+        <field name="act_window_id" ref="action_hhexpense_all_to_post"/>
+    </record>
+    <record id="hhexpense_all_to_pay_view_tree" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="hhexpense_view_tree_no_create"/>
+        <field name="act_window_id" ref="action_hhexpense_all_to_pay"/>
+    </record>
+
+    <!--<record id="hhexpense_toPost_view_specification_tree" model="ir.actions.act_window.view">-->
+        <!--<field name="sequence" eval="1"/>-->
+        <!--<field name="view_mode">tree</field>-->
+        <!--<field name="view_id" ref="hhexpense_all_to_post_view_tree"/>-->
+        <!--<field name="act_window_id" ref="action_hhexpense_all_to_post"/>-->
+    <!--</record>-->
+    <!--<record id="hhexpense_toPay_view_specification_tree" model="ir.actions.act_window.view">-->
+        <!--<field name="sequence" eval="2"/>-->
+        <!--<field name="view_mode">tree</field>-->
+        <!--<field name="view_id" ref="hhexpense_all_to_pay_view_tree"/>-->
+        <!--<field name="act_window_id" ref="action_hhexpense_all_to_pay"/>-->
+    <!--</record>-->
+
+    <menuitem id="hhexpense_menu_approved_expenses" name="Accountant" sequence="3" parent="hhexpense.hhexpense_menu_root" groups="hhexpense.group_hhexpense_accountant"/>
+    <menuitem id="hhexpense_menu_all_to_post" name="Expense Reports To Post" sequence="2" parent="hhexpense_menu_approved_expenses"
+        action="action_hhexpense_all_to_post"/>
+    <menuitem id="hhexpense_menu_all_to_pay" name="Expense Reports To Pay" sequence="3" parent="hhexpense_menu_approved_expenses"
+            action="action_hhexpense_all_to_pay"/>
+
+
+
+    <!-- Action for menu "Accouting History" -->
+    <!--<record id="hhexpense_action_accountant_expense_post_history" model="ir.actions.act_window">-->
+        <!--<field name="name">Accouting post History</field>-->
+        <!--<field name="res_model">hhexpense.hhexpense</field>-->
+        <!--<field name="view_type">form</field>-->
+        <!--<field name="view_mode">tree,form</field>-->
+        <!--<field name="domain">[('state', '=', 'posted')]</field>-->
+        <!--&lt;!&ndash;<field name="context">{'search_default_group_posted_expense': 1}</field>&ndash;&gt;-->
+        <!--<field name="search_view_id" ref="view_historical_expenses_filter"/>-->
+        <!--<field name="help" type="html">-->
+          <!--<p>-->
+            <!--There is no posted expense history for now.-->
+          <!--</p>-->
+        <!--</field>-->
+    <!--</record>-->
+
+    <!--<record id="hhexpense_action_accountant_expense_pay_history" model="ir.actions.act_window">-->
+        <!--<field name="name">Accouting pay History</field>-->
+        <!--<field name="res_model">hhexpense.hhexpense</field>-->
+        <!--<field name="view_type">form</field>-->
+        <!--<field name="view_mode">tree,form</field>-->
+        <!--<field name="domain">[('state', '=', 'done')]</field>-->
+        <!--&lt;!&ndash;<field name="context">{'search_default_group_posted_expense': 1}</field>&ndash;&gt;-->
+        <!--<field name="search_view_id" ref="view_historical_expenses_filter"/>-->
+        <!--<field name="help" type="html">-->
+          <!--<p>-->
+            <!--There is no paid expense history for now.-->
+          <!--</p>-->
+        <!--</field>-->
+    <!--</record>-->
+
+    <!--<record id="accountant_expense_post_history_view_specification_tree" model="ir.actions.act_window.view">-->
+        <!--<field name="sequence" eval="1"/>-->
+        <!--<field name="view_mode">tree</field>-->
+        <!--<field name="view_id" ref="hhexpense_view_tree_no_create"/>-->
+        <!--<field name="act_window_id" ref="hhexpense_action_accountant_expense_post_history"/>-->
+    <!--</record>-->
+
+    <!--<record id="accountant_expense_post_history_view_specification_form" model="ir.actions.act_window.view">-->
+        <!--<field name="sequence" eval="1"/>-->
+        <!--<field name="view_mode">form</field>-->
+        <!--<field name="view_id" ref="hhexpense_view_form_no_edit"/>-->
+        <!--<field name="act_window_id" ref="hhexpense_action_accountant_expense_post_history"/>-->
+    <!--</record>-->
+
+    <!--<record id="accountant_expense_pay_history_view_specification_tree" model="ir.actions.act_window.view">-->
+        <!--<field name="sequence" eval="1"/>-->
+        <!--<field name="view_mode">tree</field>-->
+        <!--<field name="view_id" ref="hhexpense_view_tree_no_create"/>-->
+        <!--<field name="act_window_id" ref="hhexpense_action_accountant_expense_pay_history"/>-->
+    <!--</record>-->
+
+    <!--<record id="accountant_expense_pay_history_view_specification_form" model="ir.actions.act_window.view">-->
+        <!--<field name="sequence" eval="1"/>-->
+        <!--<field name="view_mode">form</field>-->
+        <!--<field name="view_id" ref="hhexpense_view_form_no_edit"/>-->
+        <!--<field name="act_window_id" ref="hhexpense_action_accountant_expense_pay_history"/>-->
+    <!--</record>-->
+
+    <!--<menuitem id="hhexpense_menu_accountant_expense_history" name="Accounting History" sequence="5" parent="hhexpense.hhexpense_menu_root" groups="hhexpense.group_hhexpense_accountant"/>-->
+    <!--<menuitem id="hhexpense_menu_accountant_expense_post_history" name="Post" sequence="1" parent="hhexpense.hhexpense_menu_accountant_expense_history" action="hhexpense_action_accountant_expense_post_history"/>-->
+    <!--<menuitem id="hhexpense_menu_accountant_expense_pay_history" name="Payment" sequence="2" parent="hhexpense.hhexpense_menu_accountant_expense_history" action="hhexpense_action_accountant_expense_pay_history" />-->
+
+</odoo>

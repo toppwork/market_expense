@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Adds all assets in Odoo -->
+        <!-- The ‘web.assets_backend’ is already created by Odoo and contains all the CSS/JavaScript code
+        so we’ll simply inherit it to add our files to it.  -->
+        <template id="assets_backend" name="hhexpense assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <!--These links will be called when loading your Odoo -->
+                <link rel="stylesheet" href="/hhexpense/static/src/less/attachment.less"/>
+                <link rel="stylesheet" href="/hhexpense/static/src/less/index.less"/>
+                <script type="text/javascript" src="/hhexpense/static/src/js/attachment.js"></script>
+            </xpath>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id="hhexpense_view_document_file_form" model="ir.ui.view" >
+            <field name="name">hhexpense.attachment.form</field>
+            <field name="model">hhexpense.attachment</field>
+            <field name="mode">primary</field>
+            <field name="inherit_id" ref="base.view_attachment_form"/>
+            <field name="arch" type="xml">
+                 <xpath expr="//form" position="attributes">
+                    <attribute name="create">false</attribute>
+                </xpath>
+                <xpath expr="//form/sheet/group" position="replace">
+                    <field name="datas"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="hhexpense_attachment_action_attachment" model="ir.actions.act_window">
+            <field name="name">Receipt Attachments</field>
+            <field name="res_model">hhexpense.attachment</field>
+            <field name="view_mode">kanban,form</field>
+        </record>
+    </data>
+</odoo>
