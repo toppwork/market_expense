@@ -16,7 +16,7 @@
     # Check https://github.com/odoo/odoo/blob/master/odoo/addons/base/module/module_data.xml
     # for the full list
     'category': 'Human Resources',
-    'images': ['images/hhplugins_screenshot.jpg'],
+    'images': ['images/screenshot.jpg'],
     'version': '1.0',
     'depends': ['base', 'mail', 'hr', 'account_accountant', 'web_tour'],
     'data': [
