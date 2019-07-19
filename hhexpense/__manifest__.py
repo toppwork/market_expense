@@ -1,28 +1,24 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "E-expense(HH)",
+    'name': "E-Expense",
     'sequence': 1,
     'summary': """
         A simple, easy to use online expense tool helping employees and management to efficiently
             process expenditures within an intuitive and robust system.""",
-
     'description': """
-        Long description of module's purpose
+        A simple, easy to use online expense tool helping employees and management to efficiently
+            process expenditures within an intuitive and robust system.
     """,
-
-    'author': "HungHing -- Toppwork",
-
+    'author': "Toppwork",
+    'license': 'LGPL-3',
     'website': "http://www.toppwork.com",
-
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/master/odoo/addons/base/module/module_data.xml
     # for the full list
-    'category': 'Uncategorized',
-
-    'version': '0.1',
-
+    'category': 'Human Resources',
+    'images': ['images/hhplugins_screenshot.jpg'],
+    'version': '1.0',
     'depends': ['base', 'mail', 'hr', 'account_accountant', 'web_tour'],
-
     'data': [
         'wizard/hhexpense_reject_reason_views.xml',
         'wizard/hhexpense_register_payment.xml',
@@ -41,12 +37,10 @@
         'report/hhexpense_report.xml',
 
         'data/hhexpense_data.xml',
-
     ],
     'demo': [
         'demo/demo.xml',
     ],
-
     'installable': True,
     'application': True,
 }
