@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="ac827373-5947-402d-b18e-b853c1d5a81d" name="Default" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="__manifest__.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/hhexpense/__manifest__.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="340">
+              <caret line="17" column="34" selection-start-line="17" selection-start-column="34" selection-end-line="17" selection-end-column="34" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/hhexpense/static/description/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="433">
+              <caret line="329" column="56" selection-start-line="329" selection-start-column="56" selection-end-line="329" selection-end-column="56" />
+              <folding>
+                <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#section#6;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="hhexpense.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/hhexpense/models/hhexpense.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3240">
+              <caret line="183" column="29" selection-start-line="183" selection-start-column="8" selection-end-line="183" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>_compute_total_amount</find>
+      <find />
+      <find />
+    </findStrings>
+    <dirStrings>
+      <dir>C:\Users\ailsa.xu\Desktop\GIT_repository\Market_E-Expense\hhexpense</dir>
+    </dirStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/hhexpense/__manifest__.py" />
+        <option value="$PROJECT_DIR$/hhexpense/static/description/index.html" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="7">
+    <option name="x" value="1912" />
+    <option name="y" value="-8" />
+    <option name="width" value="1874" />
+    <option name="height" value="1096" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="Market_E-Expense" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Market_E-Expense" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Market_E-Expense" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Market_E-Expense" type="462c0819:PsiDirectoryNode" />
+              <item name="hhexpense" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Market_E-Expense" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Market_E-Expense" type="462c0819:PsiDirectoryNode" />
+              <item name="hhexpense" type="462c0819:PsiDirectoryNode" />
+              <item name="images" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Market_E-Expense" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Market_E-Expense" type="462c0819:PsiDirectoryNode" />
+              <item name="hhexpense" type="462c0819:PsiDirectoryNode" />
+              <item name="models" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Market_E-Expense" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Market_E-Expense" type="462c0819:PsiDirectoryNode" />
+              <item name="hhexpense" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Market_E-Expense" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Market_E-Expense" type="462c0819:PsiDirectoryNode" />
+              <item name="hhexpense" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="description" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../E-Expense" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\ailsa.xu\Desktop\Market_E-Expense\hhexpense\static\description" />
+      <recent name="C:\Users\ailsa.xu\Desktop\Market_E-Expense\hhexpense" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ac827373-5947-402d-b18e-b853c1d5a81d" name="Default" comment="" />
+      <created>1563521095642</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1563521095642</updated>
+    </task>
+    <task id="LOCAL-00001" summary="add screenshot">
+      <created>1563523009453</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1563523009453</updated>
+    </task>
+    <task id="LOCAL-00002" summary="change name of screenshot">
+      <created>1563524165864</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1563524165864</updated>
+    </task>
+    <task id="LOCAL-00003" summary="change file name from PNG to png">
+      <created>1563526648710</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1563526648710</updated>
+    </task>
+    <task id="LOCAL-00004" summary="add demo user table">
+      <created>1563759687182</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1563759687182</updated>
+    </task>
+    <task id="LOCAL-00005" summary="add demo user table2">
+      <created>1563760035484</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1563760035484</updated>
+    </task>
+    <task id="LOCAL-00006" summary="add demo user table3">
+      <created>1563760142867</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1563760142867</updated>
+    </task>
+    <task id="LOCAL-00007" summary="add demo user table4">
+      <created>1563760278362</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1563760278362</updated>
+    </task>
+    <task id="LOCAL-00008" summary="add demo user table5">
+      <created>1563786480343</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1563786480343</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="1912" y="-8" width="1874" height="1096" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
+      <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Python Console" order="7" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Terminal" order="7" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26074973" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="right" id="Database" order="3" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="right" id="SciView" order="3" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="Messages" order="7" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="add screenshot" />
+    <MESSAGE value="change name of screenshot" />
+    <MESSAGE value="change file name from PNG to png" />
+    <MESSAGE value="add demo user table" />
+    <MESSAGE value="add demo user table2" />
+    <MESSAGE value="add demo user table3" />
+    <MESSAGE value="add demo user table4" />
+    <MESSAGE value="add demo user table5" />
+    <option name="LAST_COMMIT_MESSAGE" value="add demo user table5" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/hhexpense/__manifest__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="17" column="34" selection-start-line="17" selection-start-column="34" selection-end-line="17" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hhexpense/models/hhexpense.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3240">
+          <caret line="183" column="29" selection-start-line="183" selection-start-column="8" selection-end-line="183" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hhexpense/static/description/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6580">
+          <caret line="329" column="56" lean-forward="true" selection-start-line="329" selection-start-column="56" selection-end-line="329" selection-end-column="56" />
+          <folding>
+            <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#section#6;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hhexpense/__manifest__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="17" column="34" selection-start-line="17" selection-start-column="34" selection-end-line="17" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hhexpense/models/hhexpense.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3240">
+          <caret line="183" column="29" selection-start-line="183" selection-start-column="8" selection-end-line="183" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hhexpense/static/description/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6100">
+          <caret line="315" column="14" lean-forward="true" selection-end-line="345" />
+          <folding>
+            <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#section#6;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hhexpense/__manifest__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="17" column="34" selection-start-line="17" selection-start-column="34" selection-end-line="17" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hhexpense/models/hhexpense.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3240">
+          <caret line="183" column="29" selection-start-line="183" selection-start-column="8" selection-end-line="183" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hhexpense/static/description/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6280">
+          <caret line="324" column="82" lean-forward="true" selection-start-line="324" selection-start-column="82" selection-end-line="324" selection-end-column="82" />
+          <folding>
+            <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#section#6;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hhexpense/__manifest__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="17" column="34" selection-start-line="17" selection-start-column="34" selection-end-line="17" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hhexpense/models/hhexpense.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3240">
+          <caret line="183" column="29" selection-start-line="183" selection-start-column="8" selection-end-line="183" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hhexpense/static/description/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6440">
+          <caret line="332" column="14" lean-forward="true" selection-start-line="332" selection-start-column="14" selection-end-line="332" selection-end-column="14" />
+          <folding>
+            <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#section#6;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hhexpense/__manifest__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="17" column="34" selection-start-line="17" selection-start-column="34" selection-end-line="17" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hhexpense/models/hhexpense.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3240">
+          <caret line="183" column="29" selection-start-line="183" selection-start-column="8" selection-end-line="183" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hhexpense/static/description/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="433">
+          <caret line="329" column="56" selection-start-line="329" selection-start-column="56" selection-end-line="329" selection-end-column="56" />
+          <folding>
+            <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#section#6;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
