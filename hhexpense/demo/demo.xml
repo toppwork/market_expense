@@ -1,30 +1,429 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
-        <!--  -->
-        <!--   <record id="object0" model="hhexpense.hhexpense"> -->
-        <!--     <field name="name">Object 0</field> -->
-        <!--     <field name="value">0</field> -->
-        <!--   </record> -->
-        <!--  -->
-        <!--   <record id="object1" model="hhexpense.hhexpense"> -->
-        <!--     <field name="name">Object 1</field> -->
-        <!--     <field name="value">10</field> -->
-        <!--   </record> -->
-        <!--  -->
-        <!--   <record id="object2" model="hhexpense.hhexpense"> -->
-        <!--     <field name="name">Object 2</field> -->
-        <!--     <field name="value">20</field> -->
-        <!--   </record> -->
-        <!--  -->
-        <!--   <record id="object3" model="hhexpense.hhexpense"> -->
-        <!--     <field name="name">Object 3</field> -->
-        <!--     <field name="value">30</field> -->
-        <!--   </record> -->
-        <!--  -->
-        <!--   <record id="object4" model="hhexpense.hhexpense"> -->
-        <!--     <field name="name">Object 4</field> -->
-        <!--     <field name="value">40</field> -->
-        <!--   </record> -->
-        <!--  -->
+    <data noupdate="1">
+
+        <!--<record id="hr.employee_mit" model="hr.employee">-->
+            <!--<field name="address_home_id" ref="base.res_partner_address_3"/>-->
+        <!--</record>-->
+
+        <!--<record id="res_partner_address_fp" model="res.partner">-->
+            <!--<field name="name">Pieter Parter's Farm</field>-->
+            <!--<field name="parent_id" eval="ref('base.partner_root')"/>-->
+            <!--<field name="supplier">1</field>-->
+            <!--<field name="street">Chaussée de Namur, 40</field>-->
+            <!--<field name="zip">1367</field>-->
+            <!--<field name="city">Grand-Rosière-Hottomont</field>-->
+            <!--<field name="country_id" ref="base.be"/>-->
+        <!--</record>-->
+
+        <!--<record id="hr.employee_root" model="hr.employee">-->
+            <!--<field name="address_home_id" ref="res_partner_address_fp"/>-->
+        <!--</record>-->
+
+        <record id="hhexpense_boat_ticket" model="product.product">
+            <field name="list_price">1</field>
+            <field name="standard_price">1</field>
+            <field name="type">service</field>
+            <field name="name">Boat Ticket</field>
+            <field name="default_code">EXP</field>
+            <field name="uom_id" ref="product.product_uom_km"/>
+            <field name="uom_po_id" ref="product.product_uom_km"/>
+            <!--<field name="property_account_expense_id" ref="l10n_generic_coa.conf_a_expense"/>-->
+            <field name="property_account_expense_id" ref="l10n_generic_coa.conf_a_expense"/>
+            <field name="can_be_hhexpensed" eval="True" />
+            <!--<field name="image" type="base64" file="hr_expense/static/img/car_travel-image.jpg"/>-->
+        </record>
+
+        <record id="hhexpense_computer_accessories" model="product.product">
+            <field name="list_price">1</field>
+            <field name="standard_price">1</field>
+            <field name="type">service</field>
+            <field name="name">Computer Accessories</field>
+            <field name="default_code">EXP</field>
+            <field name="uom_id" ref="product.product_uom_km"/>
+            <field name="uom_po_id" ref="product.product_uom_km"/>
+            <field name="property_account_expense_id" ref="l10n_generic_coa.conf_a_expense"/>
+            <field name="can_be_hhexpensed" eval="True" />
+            <!--<field name="image" type="base64" file="hr_expense/static/img/car_travel-image.jpg"/>-->
+        </record>
+
+        <record id="hhexpense_flight_ticket" model="product.product">
+            <field name="list_price">1</field>
+            <field name="standard_price">1</field>
+            <field name="type">service</field>
+            <field name="name">Flight Ticket</field>
+            <field name="default_code">EXP</field>
+            <field name="uom_id" ref="product.product_uom_km"/>
+            <field name="uom_po_id" ref="product.product_uom_km"/>
+            <field name="property_account_expense_id" ref="l10n_generic_coa.conf_a_expense"/>
+            <field name="can_be_hhexpensed" eval="True" />
+            <!--<field name="image" type="base64" file="hr_expense/static/img/car_travel-image.jpg"/>-->
+        </record>
+
+        <record id="hhexpense_gasoline" model="product.product">
+            <field name="list_price">1</field>
+            <field name="standard_price">1</field>
+            <field name="type">service</field>
+            <field name="name">Gasoline</field>
+            <field name="default_code">EXP</field>
+            <field name="uom_id" ref="product.product_uom_km"/>
+            <field name="uom_po_id" ref="product.product_uom_km"/>
+            <field name="property_account_expense_id" ref="l10n_generic_coa.conf_a_expense"/>
+            <field name="can_be_hhexpensed" eval="True" />
+            <!--<field name="image" type="base64" file="hr_expense/static/img/car_travel-image.jpg"/>-->
+        </record>
+
+        <record id="hhexpense_hotel" model="product.product">
+            <field name="list_price">1</field>
+            <field name="standard_price">1</field>
+            <field name="type">service</field>
+            <field name="name">Hotel</field>
+            <field name="default_code">EXP</field>
+            <field name="uom_id" ref="product.product_uom_km"/>
+            <field name="uom_po_id" ref="product.product_uom_km"/>
+            <field name="property_account_expense_id" ref="l10n_generic_coa.conf_a_expense"/>
+            <field name="can_be_hhexpensed" eval="True" />
+            <!--<field name="image" type="base64" file="hr_expense/static/img/car_travel-image.jpg"/>-->
+        </record>
+
+        <record id="hhexpense_meal_with_customer" model="product.product">
+            <field name="list_price">1</field>
+            <field name="standard_price">1</field>
+            <field name="type">service</field>
+            <field name="name">Meal (with Customer)</field>
+            <field name="default_code">EXP</field>
+            <field name="uom_id" ref="product.product_uom_km"/>
+            <field name="uom_po_id" ref="product.product_uom_km"/>
+            <field name="property_account_expense_id" ref="l10n_generic_coa.conf_a_expense"/>
+            <field name="can_be_hhexpensed" eval="True" />
+            <!--<field name="image" type="base64" file="hr_expense/static/img/car_travel-image.jpg"/>-->
+        </record>
+
+        <record id="hhexpense_parking" model="product.product">
+            <field name="list_price">1</field>
+            <field name="standard_price">1</field>
+            <field name="type">service</field>
+            <field name="name">Parking</field>
+            <field name="default_code">EXP</field>
+            <field name="uom_id" ref="product.product_uom_km"/>
+            <field name="uom_po_id" ref="product.product_uom_km"/>
+            <field name="property_account_expense_id" ref="l10n_generic_coa.conf_a_expense"/>
+            <field name="can_be_hhexpensed" eval="True" />
+            <!--<field name="image" type="base64" file="hr_expense/static/img/car_travel-image.jpg"/>-->
+        </record>
+
+        <record id="hhexpense_passport_or_visa" model="product.product">
+            <field name="list_price">1</field>
+            <field name="standard_price">1</field>
+            <field name="type">service</field>
+            <field name="name">Passport/VISA</field>
+            <field name="default_code">EXP</field>
+            <field name="uom_id" ref="product.product_uom_km"/>
+            <field name="uom_po_id" ref="product.product_uom_km"/>
+            <field name="property_account_expense_id" ref="l10n_generic_coa.conf_a_expense"/>
+            <field name="can_be_hhexpensed" eval="True" />
+            <!--<field name="image" type="base64" file="hr_expense/static/img/car_travel-image.jpg"/>-->
+        </record>
+
+        <record id="hhexpense_phone_cost" model="product.product">
+            <field name="list_price">1</field>
+            <field name="standard_price">1</field>
+            <field name="type">service</field>
+            <field name="name">Phone Cost</field>
+            <field name="default_code">EXP</field>
+            <field name="uom_id" ref="product.product_uom_km"/>
+            <field name="uom_po_id" ref="product.product_uom_km"/>
+            <field name="property_account_expense_id" ref="l10n_generic_coa.conf_a_expense"/>
+            <field name="can_be_hhexpensed" eval="True" />
+            <!--<field name="image" type="base64" file="hr_expense/static/img/car_travel-image.jpg"/>-->
+        </record>
+
+        <record id="hhexpense_postage_and_courier" model="product.product">
+            <field name="list_price">1</field>
+            <field name="standard_price">1</field>
+            <field name="type">service</field>
+            <field name="name">Postage &amp; Courier</field>
+            <field name="default_code">EXP</field>
+            <field name="uom_id" ref="product.product_uom_km"/>
+            <field name="uom_po_id" ref="product.product_uom_km"/>
+            <field name="property_account_expense_id" ref="l10n_generic_coa.conf_a_expense"/>
+            <field name="can_be_hhexpensed" eval="True" />
+            <!--<field name="image" type="base64" file="hr_expense/static/img/car_travel-image.jpg"/>-->
+        </record>
+
+        <record id="hhexpense_public_transport" model="product.product">
+            <field name="list_price">1</field>
+            <field name="standard_price">1</field>
+            <field name="type">service</field>
+            <field name="name">Public Transport</field>
+            <field name="default_code">EXP</field>
+            <field name="uom_id" ref="product.product_uom_km"/>
+            <field name="uom_po_id" ref="product.product_uom_km"/>
+            <field name="property_account_expense_id" ref="l10n_generic_coa.conf_a_expense"/>
+            <field name="can_be_hhexpensed" eval="True" />
+            <!--<field name="image" type="base64" file="hr_expense/static/img/car_travel-image.jpg"/>-->
+        </record>
+
+        <record id="hhexpense_repair_and_maintenance" model="product.product">
+            <field name="list_price">1</field>
+            <field name="standard_price">1</field>
+            <field name="type">service</field>
+            <field name="name">Repair &amp; Maintenance</field>
+            <field name="default_code">EXP</field>
+            <field name="uom_id" ref="product.product_uom_km"/>
+            <field name="uom_po_id" ref="product.product_uom_km"/>
+            <field name="property_account_expense_id" ref="l10n_generic_coa.conf_a_expense"/>
+            <field name="can_be_hhexpensed" eval="True" />
+            <!--<field name="image" type="base64" file="hr_expense/static/img/car_travel-image.jpg"/>-->
+        </record>
+
+        <record id="hhexpense_seminar" model="product.product">
+            <field name="list_price">1</field>
+            <field name="standard_price">1</field>
+            <field name="type">service</field>
+            <field name="name">Seminar</field>
+            <field name="default_code">EXP</field>
+            <field name="uom_id" ref="product.product_uom_km"/>
+            <field name="uom_po_id" ref="product.product_uom_km"/>
+            <field name="property_account_expense_id" ref="l10n_generic_coa.conf_a_expense"/>
+            <field name="can_be_hhexpensed" eval="True" />
+            <!--<field name="image" type="base64" file="hr_expense/static/img/car_travel-image.jpg"/>-->
+        </record>
+
+        <record id="hhexpense_taxi" model="product.product">
+            <field name="list_price">1</field>
+            <field name="standard_price">1</field>
+            <field name="type">service</field>
+            <field name="name">Taxi</field>
+            <field name="default_code">EXP</field>
+            <field name="uom_id" ref="product.product_uom_km"/>
+            <field name="uom_po_id" ref="product.product_uom_km"/>
+            <field name="property_account_expense_id" ref="l10n_generic_coa.conf_a_expense"/>
+            <field name="can_be_hhexpensed" eval="True" />
+            <!--<field name="image" type="base64" file="hr_expense/static/img/car_travel-image.jpg"/>-->
+        </record>
+
+        <record id="hhexpense_tunnel_fee" model="product.product">
+            <field name="list_price">1</field>
+            <field name="standard_price">1</field>
+            <field name="type">service</field>
+            <field name="name">Tunnel Fee</field>
+            <field name="default_code">EXP</field>
+            <field name="uom_id" ref="product.product_uom_km"/>
+            <field name="uom_po_id" ref="product.product_uom_km"/>
+            <field name="property_account_expense_id" ref="l10n_generic_coa.conf_a_expense"/>
+            <field name="can_be_hhexpensed" eval="True" />
+            <!--<field name="image" type="base64" file="hr_expense/static/img/car_travel-image.jpg"/>-->
+        </record>
+
+
+        <!--*****************************************expense demo data**********************************************-->
+        <record id="boat_ticket_expense1" model="hhexpense.hhexpense">
+            <field name="name">Boat Ticket Expenses</field>
+            <field name="employee_id" ref="hr.employee_al"/>
+            <field name="employee_name">Antoine Langlais</field>
+            <field name="state">draft</field>
+            <field name="claim_as_agent" eval='False'/>
+        </record>
+
+        <record id="boat_ticket_expense_item1" model="hhexpense.line">
+            <field name="expense_id" ref="boat_ticket_expense1"/>
+            <field name="expense_line_name">[EXP] Boat Ticket</field>
+            <field name="product_id" ref="hhexpense_boat_ticket"/>
+            <field eval="400.0" name="unit_amount"/>
+            <field eval="5.0" name="quantity"/>
+            <field name="product_uom_id" ref="product.product_uom_day"/>
+            <field name="expense_line_date" eval="(DateTime.today() + relativedelta(days=3)).strftime('%Y-%m-%d %H:%M')"/>
+            <field name="currency_id" ref="base.EUR" />
+            <field name="confirm_item_invoice" eval='0'/>
+            <field name="state">draft</field>
+            <field name="expense_line_cost" eval="15"/>
+        </record>
+
+        <!--***********************expense************************-->
+        <record id="computer_accessories_expense" model="hhexpense.hhexpense">
+            <field name="name">Computer Accessories Expenses</field>
+            <field name="employee_id" ref="hr.employee_mit"/>
+            <field name="employee_name">John Smith</field>
+            <field name="state">rejected</field>
+            <field name="claim_as_agent" eval='False'/>
+        </record>
+
+        <record id="computer_accessories_expense_item" model="hhexpense.line">
+            <field name="expense_id" ref="computer_accessories_expense"/>
+            <field name="expense_line_name">[EXP] Computer Accessories</field>
+            <field name="product_id" ref="hhexpense_computer_accessories"/>
+            <field eval="1000.0" name="unit_amount"/>
+            <field eval="5.0" name="quantity"/>
+            <field name="product_uom_id" ref="product.product_uom_day"/>
+            <field name="expense_line_date" eval="(DateTime.today() + relativedelta(days=2)).strftime('%Y-%m-%d %H:%M')"/>
+            <field name="currency_id" ref="base.EUR" />
+            <field name="confirm_item_invoice" eval='0'/>
+            <field name="state">rejected</field>
+            <field name="expense_line_cost" eval="560"/>
+        </record>
+
+        <!--&lt;!&ndash;***********************expense************************&ndash;&gt;-->
+        <record id="computer_accessories_expense2" model="hhexpense.hhexpense">
+            <field name="name">Computer Accessories Expenses2</field>
+            <field name="employee_id" ref="hr.employee_mit"/>
+            <field name="employee_name">John Smith</field>
+            <field name="state">rejected</field>
+            <field name="claim_as_agent" eval='False'/>
+        </record>
+
+        <record id="computer_accessories_expense_item2" model="hhexpense.line">
+            <field name="expense_id" ref="computer_accessories_expense2"/>
+            <field name="expense_line_name">[EXP] Computer Accessories</field>
+            <field name="product_id" ref="hhexpense_computer_accessories"/>
+            <field eval="270.0" name="unit_amount"/>
+            <field eval="9.0" name="quantity"/>
+            <field name="product_uom_id" ref="product.product_uom_day"/>
+            <field name="expense_line_date" eval="(DateTime.today() + relativedelta(days=6)).strftime('%Y-%m-%d %H:%M')"/>
+            <field name="currency_id" ref="base.EUR" />
+            <field name="confirm_item_invoice" eval='0'/>
+            <field name="state">rejected</field>
+            <field name="expense_line_cost" eval="1560"/>
+        </record>
+
+        <!--&lt;!&ndash;***********************expense************************&ndash;&gt;-->
+        <record id="flight_ticket_expense" model="hhexpense.hhexpense">
+            <field name="name">Flight Ticket Expenses</field>
+            <field name="employee_id" ref="hr.employee_qdp"/>
+            <field name="employee_name">Gilles Gravie</field>
+            <field name="state">draft</field>
+            <field name="claim_as_agent" eval='False'/>
+        </record>
+
+        <record id="flight_ticket_expense_item" model="hhexpense.line">
+            <field name="expense_id" ref="flight_ticket_expense"/>
+            <field name="expense_line_name">[EXP] Flight Ticket</field>
+            <field name="product_id" ref="hhexpense_flight_ticket"/>
+            <field eval="1000.0" name="unit_amount"/>
+            <field eval="5.0" name="quantity"/>
+            <field name="product_uom_id" ref="product.product_uom_day"/>
+            <field name="expense_line_date" eval="(DateTime.today() + relativedelta(days=2)).strftime('%Y-%m-%d %H:%M')"/>
+            <field name="currency_id" ref="base.EUR" />
+            <field name="confirm_item_invoice" eval='0'/>
+            <field name="state">draft</field>
+            <field name="expense_line_cost" eval="560"/>
+        </record>
+
+        <!--&lt;!&ndash;***********************expense************************&ndash;&gt;-->
+        <record id="gasoline_expense" model="hhexpense.hhexpense">
+            <field name="name">Gasoline Expenses</field>
+            <field name="employee_id" ref="hr.employee_fme"/>
+            <field name="employee_name">Jack Macklin</field>
+            <field name="state">done</field>
+            <field name="claim_as_agent" eval='False'/>
+        </record>
+
+        <record id="gasoline_expense_item" model="hhexpense.line">
+            <field name="expense_id" ref="gasoline_expense"/>
+            <field name="expense_line_name">[EXP] Flight Ticket</field>
+            <field name="product_id" ref="hhexpense_gasoline"/>
+            <field eval="10.0" name="unit_amount"/>
+            <field eval="5.0" name="quantity"/>
+            <field name="product_uom_id" ref="product.product_uom_day"/>
+            <field name="expense_line_date" eval="(DateTime.today() + relativedelta(days=2)).strftime('%Y-%m-%d %H:%M')"/>
+            <field name="currency_id" ref="base.EUR" />
+            <field name="confirm_item_invoice" eval='0'/>
+            <field name="state">done</field>
+            <field name="expense_line_cost" eval="56"/>
+        </record>
+
+        <!--&lt;!&ndash;***********************expense************************&ndash;&gt;-->
+        <record id="hotel_expense" model="hhexpense.hhexpense">
+            <field name="name">Hotel Expenses</field>
+            <field name="employee_id" ref="hr.employee_han"/>
+            <field name="employee_name">Hans Anders</field>
+            <field name="state">posted</field>
+            <field name="claim_as_agent" eval='False'/>
+        </record>
+
+        <record id="hotel_expense_item" model="hhexpense.line">
+            <field name="expense_id" ref="hotel_expense"/>
+            <field name="expense_line_name">[EXP] Hotel</field>
+            <field name="product_id" ref="hhexpense_hotel"/>
+            <field eval="1000.0" name="unit_amount"/>
+            <field eval="5.0" name="quantity"/>
+            <field name="product_uom_id" ref="product.product_uom_day"/>
+            <field name="expense_line_date" eval="(DateTime.today() + relativedelta(days=2)).strftime('%Y-%m-%d %H:%M')"/>
+            <field name="currency_id" ref="base.EUR" />
+            <field name="confirm_item_invoice" eval='0'/>
+            <field name="state">posted</field>
+            <field name="expense_line_cost" eval="560"/>
+        </record>
+
+        <!--&lt;!&ndash;***********************expense************************&ndash;&gt;-->
+        <record id="meal_with_customer_expense" model="hhexpense.hhexpense">
+            <field name="name">Meal With Customer Expenses</field>
+            <field name="employee_id" ref="hr.employee_jve"/>
+            <field name="employee_name">Jan Van Eyck</field>
+            <field name="state">approved</field>
+            <field name="claim_as_agent" eval='False'/>
+        </record>
+
+        <record id="meal_with_customer_expense_item" model="hhexpense.line">
+            <field name="expense_id" ref="meal_with_customer_expense"/>
+            <field name="expense_line_name">[EXP] Meal With Customer</field>
+            <field name="product_id" ref="hhexpense_meal_with_customer"/>
+            <field eval="1000.0" name="unit_amount"/>
+            <field eval="5.0" name="quantity"/>
+            <field name="product_uom_id" ref="product.product_uom_day"/>
+            <field name="expense_line_date" eval="(DateTime.today() + relativedelta(days=2)).strftime('%Y-%m-%d %H:%M')"/>
+            <field name="currency_id" ref="base.EUR" />
+            <field name="confirm_item_invoice" eval='0'/>
+            <field name="state">approved</field>
+            <field name="expense_line_cost" eval="360"/>
+        </record>
+
+        <!--&lt;!&ndash;***********************expense************************&ndash;&gt;-->
+        <record id="meal_with_customer_expense2" model="hhexpense.hhexpense">
+            <field name="name">Meal With Customer Expenses</field>
+            <field name="employee_id" ref="hr.employee_jve"/>
+            <field name="employee_name">Jan Van Eyck</field>
+            <field name="expense_create_date">2019-07-28 09:10:48.093052</field>
+            <field name="state">approved</field>
+            <field name="claim_as_agent" eval='False'/>
+        </record>
+
+        <record id="meal_with_customer_expense_item2" model="hhexpense.line">
+            <field name="expense_id" ref="meal_with_customer_expense2"/>
+            <field name="expense_line_name">[EXP] Meal With Customer</field>
+            <field name="product_id" ref="hhexpense_meal_with_customer"/>
+            <field eval="1000.0" name="unit_amount"/>
+            <field eval="5.0" name="quantity"/>
+            <field name="product_uom_id" ref="product.product_uom_day"/>
+            <field name="expense_line_date" eval="(DateTime.today() + relativedelta(days=2)).strftime('%Y-%m-%d %H:%M')"/>
+            <field name="currency_id" ref="base.EUR" />
+            <field name="confirm_item_invoice" eval='0'/>
+            <field name="state">approved</field>
+            <field name="expense_line_cost" eval="360"/>
+        </record>
+
+        <record id="meal_with_customer_expense3" model="hhexpense.hhexpense">
+            <field name="name">Meal With Customer Expenses</field>
+            <field name="employee_id" ref="hr.employee_jve"/>
+            <field name="employee_name">Jan Van Eyck</field>
+            <field name="expense_create_date">2019-06-28 09:10:48.093052</field>
+            <field name="state">approved</field>
+            <field name="claim_as_agent" eval='False'/>
+        </record>
+
+        <record id="meal_with_customer_expense_item3" model="hhexpense.line">
+            <field name="expense_id" ref="meal_with_customer_expense3"/>
+            <field name="expense_line_name">[EXP] Meal With Customer</field>
+            <field name="product_id" ref="hhexpense_meal_with_customer"/>
+            <field eval="1000.0" name="unit_amount"/>
+            <field eval="5.0" name="quantity"/>
+            <field name="product_uom_id" ref="product.product_uom_day"/>
+            <field name="expense_line_date" eval="(DateTime.today() + relativedelta(days=2)).strftime('%Y-%m-%d %H:%M')"/>
+            <field name="currency_id" ref="base.EUR" />
+            <field name="confirm_item_invoice" eval='0'/>
+            <field name="state">approved</field>
+            <field name="expense_line_cost" eval="360"/>
+        </record>
+
     </data>
 </odoo>

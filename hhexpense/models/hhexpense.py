@@ -50,7 +50,7 @@ class HHExpense(models.Model):
     approval_time = fields.Char()  # use 'Char' type for ez operation purpose
 
     # ------ Attachments info ------
-    expense_attachment = fields.One2many('hhexpense.attachment', inverse_name='hhexpense',
+    expense_attachment = fields.One2many('ir.attachment', inverse_name='hhexpense',
                                          states={'draft': [('readonly', False)], 'rejected': [('readonly', False)]}, readonly=True)
     # expense_attachment = fields.One2many('ir.attachment', inverse_name='hhexpense')
     confirm_invoice = fields.Boolean(string='Receipt', compute='_compute_invoice', readonly=True, store=True)
@@ -171,7 +171,7 @@ class HHExpense(models.Model):
 
     @api.multi
     def _calculate_attachment_num(self):
-        attachment_data = self.env['hhexpense.attachment'].search([])
+        attachment_data = self.env['ir.attachment'].search([])
         for rec in self:
             rec.attachment_num = 0
             for attachment in attachment_data:
@@ -207,12 +207,12 @@ class HHExpense(models.Model):
         self.env['mail.template'].browse(template.id).send_mail(self.id, force_send=True)
 
     @api.multi
-    def approve_email(self):
+    def approve_email(self, last_write_date):
         template = self.env.ref('hhexpense.mail_template_approved_expense')
         self.env['mail.template'].browse(template.id).send_mail(self.id, force_send=True)
 
     @api.multi
-    def reject_email(self):
+    def reject_email(self, last_write_date):
         template = self.env.ref('hhexpense.mail_template_reject_expense')
         self.env['mail.template'].browse(template.id).send_mail(self.id, force_send=True)
 
@@ -231,6 +231,18 @@ class HHExpense(models.Model):
                                     f"&view_type=form&model=hhexpense.hhexpense&action={page.id}&menu_id={menu_id}"
             else:
                 pass
+
+    @api.multi
+    def get_url_for_reminder(self):
+        """
+        Notes:
+            This function is called from email template (name: 'hhexpense - Reminder')
+        """
+        menu_id = self.env['ir.ui.menu'].search([('name', '=', 'E-Expense(HH)')]).id
+        action_id = self.env['ir.actions.act_window'].search([('name', '=', 'Expenses to Approve')]).id
+        url = f'http://smart.hunghingprinting.com/web#view_type=list&model=hhexpense.hhexpense&' \
+              f'action={action_id}&menu_id={menu_id}'
+        return url
 
     # -------------------------------------- Email --------------------------------------
     def hhexpense_post_message(self, state):
@@ -307,17 +319,21 @@ class HHExpense(models.Model):
 
     @api.multi
     def approve_expense(self):
+        last_write_date = self.write_date
+
         self.with_context(tracking_disable=False).state = 'approved'  # this also work --> self.write({'state': 'approved'})
         self.rec_approver_name = self.env.user.name
         self.approval_time = datetime.datetime.now().strftime('%Y/%m/%d - %H:%M:%S:%f')
-        self.approve_email()
+        self.approve_email(last_write_date)
         self.hhexpense_post_message('approve')
 
     @api.multi
     def reject_expense(self, reason):
+        last_write_date = self.write_date
+
         self.reject_reason = reason
         self.state = 'rejected'
-        self.reject_email()
+        self.reject_email(last_write_date)
         self.hhexpense_post_message('reject')
         return
 
@@ -390,6 +406,27 @@ class HHExpense(models.Model):
             'company_id': employee.company_id.id,
         })
         return super(HHExpense, self).message_new(msg_dict, custom_values)
+
+    # --------------------------------------- Attachment  ---------------------------------------------
+    @api.multi
+    def create_ir_attachment(self, values):
+        self.ensure_one()
+        view_ref = self.env.ref('hhexpense.hhexpense_view_document_file_form').id
+        # print(view_ref)
+        return {
+            'type': 'ir.actions.act_window',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'view_id': view_ref,
+            'res_model': 'ir.attachment',
+            'res_id': self.id,
+            'target': 'new',
+            # 'hide_footer': True
+            'context': {
+                'default_res_model': 'ir.attachment',
+                'default_res_id': self.id,
+            }
+        }
 
     # --------------------------------------- Accounting ----------------------------------------------
     @api.multi

@@ -18,7 +18,7 @@
     'category': 'Human Resources',
     'images': ['images/screenshot.jpg'],
     'version': '1.0',
-    'depends': ['base', 'mail', 'hr', 'account_accountant', 'web_tour'],
+    'depends': ['base', 'mail', 'hr', 'account_accountant', 'web_tour', 'l10n_generic_coa'],
     'data': [
         'wizard/hhexpense_reject_reason_views.xml',
         'wizard/hhexpense_register_payment.xml',
@@ -27,7 +27,7 @@
         'security/ir.model.access.csv',
 
         'views/template.xml',
-        'views/hhexpense_attachment.xml',
+        # 'views/hhexpense_attachment.xml',
 
         'views/hhexpense.xml',
         'views/hhexpense_config.xml',
@@ -36,7 +36,7 @@
         'views/hhexpense_email_templates.xml',
         'report/hhexpense_report.xml',
 
-        'data/hhexpense_data.xml',
+        # 'data/hhexpense_data.xml',
     ],
     'demo': [
         'demo/demo.xml',

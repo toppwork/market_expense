@@ -2,7 +2,7 @@
 <odoo>
     <data noupdate="1">
         <!-- Resource: product.uom.categ -->
-        <record id="cat_expense" model="product.category">
+        <record id="cat_hhexpense" model="product.category">
             <field name="parent_id" ref="product.product_category_all"/>
             <field name="name">Expenses</field>
         </record>
@@ -13,8 +13,8 @@
             <field name="standard_price">1.0</field>
             <field name="type">service</field>
             <field name="default_code">EXP</field>
-            <field name="categ_id" ref="hhexpense.cat_expense"/>
-            <field name="can_be_expensed" eval="True"/>
+            <field name="categ_id" ref="hhexpense.cat_hhexpense"/>
+            <field name="can_be_hhexpensed" eval="True"/>
         </record>
     </data>
 </odoo>

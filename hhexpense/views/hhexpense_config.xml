@@ -1,5 +1,44 @@
 <?xml version="1.0"?>
 <odoo>
+    <!--&lt;!&ndash; ExpenseCategory tree view &ndash;&gt;-->
+    <!--<record id="hhexpense_expense_category_view_tree" model="ir.ui.view">-->
+        <!--<field name="name">hhexpense.expense.category.view.tree</field>-->
+        <!--<field name="model">hhexpense.expense.category</field>-->
+        <!--<field name="arch" type="xml">-->
+            <!--<tree>-->
+                <!--<field name="category"/>-->
+                <!--<field name="ref_code"/>-->
+            <!--</tree>-->
+        <!--</field>-->
+    <!--</record>-->
+
+    <!--&lt;!&ndash; ExpenseCategory form view &ndash;&gt;-->
+    <!--<record id="hhexpense_expense_category_view_form" model="ir.ui.view">-->
+        <!--<field name="name">hhexpense.expense.category.view.form</field>-->
+        <!--<field name="model">hhexpense.expense.category</field>-->
+        <!--<field name="arch" type="xml">-->
+            <!--<form>-->
+                <!--<sheet>-->
+                    <!--<group>-->
+                        <!--<field name="category"/>-->
+                        <!--<field name="ref_code"/>-->
+                    <!--</group>-->
+                <!--</sheet>-->
+            <!--</form>-->
+        <!--</field>-->
+    <!--</record>-->
+
+    <!--&lt;!&ndash; ExpenseCategory search view &ndash;&gt;-->
+    <!--<record id="hhexpense_expense_category_view_search" model="ir.ui.view">-->
+        <!--<field name="name">hhexpense.expense.category.view.search</field>-->
+        <!--<field name="model">hhexpense.expense.category</field>-->
+        <!--<field name="arch" type="xml">-->
+            <!--<search>-->
+                <!--<field name="category" string="Records" filter_domain="[('category','ilike',self)]"/>-->
+            <!--</search>-->
+        <!--</field>-->
+    <!--</record>-->
+
     <!-- Agent Reimbursement Tree view -->
     <record id="hhexpense_agent_reimbursement_view_tree" model="ir.ui.view">
         <field name="name">hhexpense.agent.reimbursement.tree</field>
