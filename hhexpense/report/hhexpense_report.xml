@@ -15,9 +15,13 @@
                             <t t-else="">
                                 <img src="/logo.png" style="padding: 0px; margin: 0px; height: auto; width: 150px;" alt="${user.company_id.name}"/>
                             </t>
+                            <!--<p t-field="company.report_header"/>-->
                         </div>
                     </t>
 
+                    <!--<t t-if="not o or not 'company_id' in o">-->
+                        <!--<t t-set="company" t-value="res_company"></t>-->
+                    <!--</t>-->
                     <h2 class="text-center mb32"><u>Expenses Report</u></h2>
                     <div class="row mt32">
                         <div class="col-xs-6">
@@ -53,6 +57,7 @@
                                 </div>
                                 <div class="col-xs-6">
                                     <div class="col-xs-6">
+                                        <!--<p t-field="o.claim_as_agent"/>-->
                                         <p t-field="o.agent_reimb_id"/>
                                     </div>
                                 </div>
@@ -137,6 +142,7 @@
                                 <th style="border:1px white solid;">Category</th>
                                 <th style="border:1px white solid;">Expense Date</th>
                                 <th class="text-center" style="border:1px white solid;">Currency</th>
+                                <!--<th>Receipt</th>-->
                                 <th class="text-center" style="border:1px white solid;">Amount</th>
                             </tr>
                         </thead>
@@ -157,6 +163,15 @@
                                 <td class="text-center" style="border-top:1px solid #d9d9d9;">
                                     <span t-field="line.currency_id"/>
                                 </td>
+                                <!--<td>-->
+                                    <!--&lt;!&ndash;<span t-field="line.confirm_item_invoice"/>&ndash;&gt;-->
+                                    <!--<t t-if="line.confirm_item_invoice">-->
+                                        <!--<i class="fa fa-check"/>-->
+                                    <!--</t>-->
+                                    <!--<t t-else="">-->
+                                        <!--<i class="fa fa-times"/>-->
+                                    <!--</t>-->
+                                <!--</td>-->
                                 <td class="text-center" style="border-top:1px solid #d9d9d9;">
                                     <span t-field="line.expense_line_cost"
                                     t-options='{"widget": "monetary", "display_currency": line.currency_id}'/>
@@ -176,11 +191,13 @@
                                 <td style="border:none;"></td>
                                 <td style="border:none;"></td>
                                 <td class="text-center" style="border-top:1px solid black;">
+                                    <!--<p><hr style="border-bottom:1px solid black; border-top:none; padding-bottom:0;"/></p>-->
                                     <p>
                                         <strong>Total</strong>
                                     </p>
                                 </td>
                                 <td class="text-center" style="border-top:1px solid black;">
+                                    <!--<p><hr/></p>-->
                                     <p>
                                         <span t-field="o.calculate_total_amount"
                                               t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
@@ -190,16 +207,38 @@
                         </tbody>
                     </table>
 
+                    <!--<div class="row mb32">-->
+                        <!--<div class="col-xs-4 pull-right">-->
+                            <!--<table class="table table-condensed">-->
+                                <!--<tr class="border-black">-->
+                                    <!--<td><strong>Total</strong></td>-->
+                                    <!--<td class="text-right">-->
+                                        <!--<span t-field="o.calculate_total_amount"-->
+                                            <!--t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>-->
+                                    <!--</td>-->
+                                <!--</tr>-->
+                            <!--</table>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
                     <div class="row mt64 mb32">
                         <div class="col-xs-3"/>
                         <div class="col-xs-3"/>
                         <div class="col-xs-3 text-right">
+                            <!--<hr style="border-bottom: 1px solid black; border-top:none; margin-bottom:3%;"/>-->
                             <strong>Request By</strong>
                             <p t-esc="o.employee_id.name"/>
+                            <!--<t t-if="o.req_date">-->
+                                <!--(<span style="font-size:9px;" t-esc="o.req_date"/>)-->
+                            <!--</t>-->
                         </div>
                         <div class="col-xs-3 text-center">
+                            <!--<hr style="border-bottom: 1px solid black; border-top:none; margin-bottom:3; width:70%;"/>-->
                             <strong>Approve By</strong>
                             <p t-esc="o.rec_approver_name"/>
+                            <!--<t t-if="o.approve_date">-->
+                                <!--(<span style="font-size:9px;" t-esc="o.approve_date"/>)-->
+                            <!--</t>-->
                         </div>
                     </div>
                 </div>
@@ -212,6 +251,8 @@
         <field name="name">HHExpense Report Format</field>
         <field name="default" eval="False"/>
         <field name="format">A4</field>
+        <!--<field name="page_height">80</field>-->
+        <!--<field name="page_width">175</field>-->
         <field name="orientation">Portrait</field>
         <field name="margin_top">0</field>
         <field name="margin_bottom">3</field>
@@ -223,7 +264,7 @@
     </record>
 
     <report
-        id="action_report_hhexpense_sheet"
+        id="action_report_hr_expense_sheet"
         string="Expenses Report"
         paperformat="paperformat_hhexpense_check"
         model="hhexpense.hhexpense"

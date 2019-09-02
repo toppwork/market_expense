@@ -10,18 +10,22 @@
     <record id="group_hhexpense_user" model="res.groups">
         <field name="name">General user</field>
         <field name="category_id" ref="hhexpense.module_category_hhexpense"/>
+        <!--<field name="users" eval="[(4, ref('base.user_root'))]"/>-->
+        <!--<field name="implied_ids" eval="[(2, ref('hr.group_hr_manager'))]"/>-->
     </record>
 
     <record id="group_hhexpense_manager" model="res.groups">
         <field name="name">Manager - not Admin</field>
         <field name="category_id" ref="hhexpense.module_category_hhexpense"/>
         <field name="implied_ids" eval="[(3, ref('hhexpense.group_hhexpense_user'))]"/>
+        <!--<field name="users" eval="[(4, ref('base.user_root'))]"/>-->
     </record>
 
     <record id="group_hhexpense_accountant" model="res.groups">
         <field name="name">Accountant</field>
         <field name="category_id" ref="hhexpense.module_category_hhexpense"/>
         <field name="implied_ids" eval="[(3, ref('hhexpense.group_hhexpense_user'))]"/>
+        <!--<field name="users" eval="[(4, ref('base.user_root'))]"/>-->
     </record>
 
     <record id="group_hhexpense_admin" model="res.groups">

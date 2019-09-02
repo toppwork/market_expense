@@ -19,6 +19,7 @@
                 <field name="state"/>
                 <field name="currency_id" invisible="1"/>
                 <field name="calculate_total_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <!--<button name="hhexpense_action_get_attachment_view" string="View Attachment" type="object" icon="fa-paperclip" attrs="{'invisible': [('attachment_num', '=', 0)]}"/>-->
             </tree>
         </field>
     </record>
@@ -40,9 +41,15 @@
                             type="object" class="oe_highlight o_expense_submit"
                             confirm="Your expense will be resubmitted. Do you want to proceed?"
                             groups="hhexpense.group_hhexpense_user"/>
+                    <!--<button string="Manager Approve" name="approve_expense" attrs="{'invisible': ['|', ('match_uid', '=', True ),  ('state', '!=', 'submitted')]}"-->
+                            <!--type="object" class="oe_highlight o_expense_sheet_approve"-->
+                            <!--confirm="This expense will be approved. Do you want to proceed?"/>-->
                     <button string="Manager Approve" name="approve_expense" attrs="{'invisible': [('state', '!=', 'submitted')]}"
                             type="object" class="oe_highlight o_expense_sheet_approve" groups="hhexpense.group_hhexpense_manager"
                             confirm="This expense will be approved. Do you want to proceed?"/>
+                    <!--<button string="Reject" name="%(hhexpense.hhexpense_reject_wizard_action)d" attrs="{'invisible': ['|', ('match_uid', '=', True ),  ('state', '!=', 'submitted')]}"-->
+                            <!--type="action"-->
+                            <!--context="{'hhexpense_reject_model':'hhexpense.hhexpense'}"/>-->
                     <button string="Reject" name="%(hhexpense.hhexpense_reject_wizard_action)d" attrs="{'invisible': [('state', '!=', 'submitted')]}"
                             type="action" groups="hhexpense.group_hhexpense_manager"
                             context="{'hhexpense_reject_model':'hhexpense.hhexpense'}"/>
@@ -52,9 +59,18 @@
                             class="oe_highlight o_expense_sheet_pay" attrs="{'invisible': [('state', '!=', 'posted')]}"
                             groups="account.group_account_manager"
                             context="{'default_amount': calculate_total_amount, 'partner_id': address_id}"/>
+                     <!--context="{'default_amount': total_amount, 'partner_id': address_id}" groups="account.group_account_manager"-->
                     <field name="state" widget="statusbar" statusbar_visible="draft,approved,done"/>
                 </header>
                 <sheet>
+                    <!--<div class="oe_button_box">-->
+                        <!--<button name="hhexpense_action_get_attachment_view"-->
+                            <!--class="oe_stat_button"-->
+                            <!--icon="fa-book"-->
+                            <!--type="object">-->
+                            <!--<field name="attachment_num" widget="statinfo" string="Attachment"/>-->
+                        <!--</button>-->
+                    <!--</div>-->
                     <div class="oe_title">
                         <label for="name"/>
                         <h1>
@@ -75,6 +91,7 @@
                             <field name="agent_reimb_id"
                                    attrs="{'invisible':[('claim_as_agent', '=', False)]}"
                                    widget="selection"/>
+                            <!--domain="[('agent_reimb_id.name', '!=', 'employee_id')]"-->
                         </group>
                         <group>
                             <field name="payment_mode" widget="radio"/>
@@ -83,13 +100,40 @@
                             <field name="reject_reason" style="font-weight:bold; color:red;" attrs="{'invisible':[('state', '!=', 'rejected')]}"/>
                         </group>
                     </group>
+                        <!--<label for="expense_line"/>-->
+                        <!--<field name="expense_line">-->
+                            <!--<form string="form view for line level date">-->
+                                <!--<group>-->
+                                    <!--<field name="expense_line_name"/>-->
+                                    <!--<field name="expense_cate_id"/>-->
+                                    <!--<field name="expense_line_date"/>-->
+                                    <!--<field name="expense_line_currency" widget="selection"/> &lt;!&ndash; if you want no limit, "relational_fields.js ~> line: 113" &ndash;&gt;-->
+                                    <!--<field name="confirm_item_invoice"/>-->
+                                    <!--<field name="expense_line_cost"/>-->
+                                <!--</group>-->
+                            <!--</form>-->
+                            <!--<tree string="default/tree/list view for line level's date" editable="bottom">-->
+                                <!--<field name="expense_id" invisible="1"/>-->
+                                <!--<field name="expense_line_name"/>-->
+                                <!--&lt;!&ndash;<field name="expense_cate_id" options="{'no_create': True}"/>&ndash;&gt;-->
+                                <!--<field name="expense_category"/>-->
+                                <!--<field name="expense_line_date"/>-->
+                                <!--<field name="expense_line_currency" options="{'no_create': True}"/>-->
+                                <!--<field name="confirm_item_invoice"/>-->
+                                <!--<field name="expense_line_belongs_to_employee" invisible="1"/>-->
+                                <!--<field name="state" invisible="1"/>-->
+                                <!--<field name="expense_line_cost"/>-->
+                            <!--</tree>-->
+                        <!--</field>-->
                     <notebook>
                         <page string="Expense Lines">
                             <field name="expense_line">
                             <form string="form view for line level date">
                                 <group>
                                     <field name="expense_line_name"/>
+                                    <!--<field name="expense_cate_id"/>-->
                                     <field name="expense_line_date"/>
+                                    <!--<field name="expense_line_currency" widget="selection"/> &lt;!&ndash; if you want no limit, "relational_fields.js ~> line: 113" &ndash;&gt;-->
                                     <field name="currency_id"/>
                                     <field name="confirm_item_invoice"/>
                                     <field name="expense_line_cost" widget="monetary" options="{'currency_field': 'currency_id'}"/>
@@ -99,9 +143,11 @@
                                 <field name="date" invisible="1"/>
                                 <field name="expense_id" invisible="1"/>
                                 <field name="expense_line_name"/>
+                                <!--<field name="expense_cate_id" options="{'no_create': True}"/>-->
                                 <field name="product_id"/>
                                 <field name="account_id" invisible="1"/>
                                 <field name="expense_line_date"/>
+                                <!--<field name="expense_line_currency" options="{'no_create': True}"/>-->
                                 <field name="currency_id"/>
                                 <field name="confirm_item_invoice"/>
                                 <field name="expense_line_belongs_to_employee" invisible="1"/>
@@ -112,6 +158,8 @@
 
                         </page>
                         <page string='Documents'>
+    						<!--<field name="travel_doc_ids" mode="kanban" options="{'not_delete': True}">-->
+                            <!--<button name="create_ir_attachment" string="Upload" type="object"/>-->
     						<field name="expense_attachment" mode="kanban">
 		                        <kanban quick_create="false" create="true" delete="true">
 		                            <field name="name"/>
@@ -119,6 +167,13 @@
 		                            <field name="mimetype"/>
 		                            <templates>
 		                                <t t-name="kanban-box">
+                                              <!--<div class="oe_kanban_vignette">-->
+                                                <!--<div class="oe_attachment">-->
+                                                    <!--<div class="oe_name" style="font-size:20px; overflow:hidden;">-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                              <!--</div>-->
+                                            <!--<div class="oe_kanban_global_click" style="max-width: 200px">-->
                                             <div class="o_kanban_record_top">
                                                 <div class="attachment_content">
                                                     <div class="attachment_name_bar">
@@ -126,39 +181,48 @@
                                                             <field name="name"/>
                                                             <field name="mimetype" invisible="1"/>
                                                             <field name="general_type" invisible="1"/>
+                                                            <!--<field name="state" invisible="1"/>-->
                                                         </p>
                                                     </div>
                                                     <div class="attachment_pic">
                                                         <t t-if="record.general_type.value == 'image'">
-                                                            <img t-att-src="kanban_image('hhexpense.attachment', 'datas', record.id.raw_value)"
+                                                            <img t-att-src="kanban_image('ir.attachment', 'datas', record.id.raw_value)"
                                                                  class="file_img"/>
+                                                            <!--ondblclick="_onAttachmentViewImg(this);" title="Double click to preview"-->
                                                         </t>
                                                         <t t-if="record.general_type.value == 'pdf'">
                                                             <img src="/hhexpense/static/src/img/pdf.png" class="pdf_file_type"/>
+                                                            <!--ondblclick="_onAttachmentViewImg(this);" title="Double click to preview"-->
                                                         </t>
                                                         <t t-if="record.general_type.value == 'others'">
                                                                 <img src="/hhexpense/static/src/img/others.png" class="other_file_type"/>
+                                                                <!--ondblclick="_onAttachmentViewImg(this);" title="Double click to preview"-->
                                                             </t>
                                                     </div>
                                                     <div class="button_bar">
                                                         <a t-if="read_only_mode" class="my_attachment_preview"  t-attf-class="o_form_uri o_field_widget"
-                                                           t-att-href="kanban_image('hhexpense.attachment', 'datas', record.id.raw_value)" t-att-target="'_blank' ">
+                                                           t-att-href="kanban_image('ir.attachment', 'datas', record.id.raw_value)" t-att-target="'_blank' ">
                                                             <img src="/hhexpense/static/src/img/preview2.png"
                                                                  title="Preview this attachment" aria-hidden="true"></img>
                                                         </a>
                                                         <a t-if="read_only_mode" class="my_attachment_download"  t-attf-class="o_form_uri o_field_widget"
-                                                           t-att-data-id="kanban_image('hhexpense.attachment', 'datas', record.id.raw_value)" t-att-target="'_blank' "
-                                                           t-att-data-name="kanban_image('hhexpense.attachment', 'name', record.id.raw_value)"
+                                                           t-att-data-id="kanban_image('ir.attachment', 'datas', record.id.raw_value)" t-att-target="'_blank' "
+                                                           t-att-data-name="kanban_image('ir.attachment', 'name', record.id.raw_value)"
                                                            onclick="_onAttachmentDownloadImg(this)">
+                                                            <!--t-att-href="kanban_image('ir.attachment', 'datas', record.id.raw_value)" t-att-target="'_blank' "-->
                                                             <img src="/hhexpense/static/src/img/download1.png"
                                                                  title="Download this attachment" aria-hidden="true"></img>
                                                         </a>
                                                         <a type="delete" class='my_attachment_delete' t-if="! read_only_mode">
+                                                            <!--attrs="{'invisible':[('states', 'not in' , ['draft', 'rejected'])]}">-->
                                                             <img src="/hhexpense/static/src/img/delete.png" title="Delete this attachment" aria-hidden="true"></img>
                                                         </a>
                                                     </div>
                                                 </div>
                                             </div>
+                                            <!--<div class="oe_kanban_details" style="text-align:center">-->
+											    <!--</div>-->
+		                                    <!--</div>-->
 		                                </t>
 		                            </templates>
 		                        </kanban>
@@ -484,5 +548,29 @@
     <!--<menuitem id="hhexpense_menu_accountant_expense_history" name="Accounting History" sequence="5" parent="hhexpense.hhexpense_menu_root" groups="hhexpense.group_hhexpense_accountant"/>-->
     <!--<menuitem id="hhexpense_menu_accountant_expense_post_history" name="Post" sequence="1" parent="hhexpense.hhexpense_menu_accountant_expense_history" action="hhexpense_action_accountant_expense_post_history"/>-->
     <!--<menuitem id="hhexpense_menu_accountant_expense_pay_history" name="Payment" sequence="2" parent="hhexpense.hhexpense_menu_accountant_expense_history" action="hhexpense_action_accountant_expense_pay_history" />-->
+
+    <!---->
+    <!---->
+
+
+
+
+
+     <!--Odoo cron job, email by Odoo -->
+    <!--<record id="ir_cron_scheduler_action_hhexpense_odoo_email_reminder" model="ir.cron">-->
+        <!--<field name="name">HHExpense: Email reminder by Odoo</field>-->
+        <!--<field name="user_id" ref="base.user_root"/>-->
+        <!--<field name='interval_number'>30</field>-->
+        <!--<field name='interval_type'>minutes</field>  &lt;!&ndash; minutes / hours / days / weeks / months &ndash;&gt;-->
+        <!--<field name="numbercall">-1</field>-->
+        <!--<field name="doall" eval="False"/>-->
+        <!--<field name="model_id" ref="model_hhexpense_hhexpense"/>-->
+        <!--<field name="state">code</field>-->
+        <!--<field name="code">model.reminder_email()</field>-->
+        <!--&lt;!&ndash;<field name="nextcall" eval="datetime.utcnow().strftime('%Y-%m-%d 23:59:00')"/>&ndash;&gt;-->
+        <!--&lt;!&ndash; timedelta(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, weeks=0) &ndash;&gt;-->
+        <!--&lt;!&ndash; next immediately run time is 1 minutes after server restart &ndash;&gt;-->
+        <!--<field name="nextcall" eval="datetime.now() + timedelta(minutes=1)"/>-->
+    <!--</record>-->
 
 </odoo>

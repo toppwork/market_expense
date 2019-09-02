@@ -41,7 +41,14 @@ class HHExpense(models.Model):
         ('rejected', 'Rejected'),
         ('done', 'Done')
     ], string='Status', default='draft', copy=False, index=True, readonly=True, store=True, help="Expense Status")
-
+    # state = fields.Selection([
+    #     ('draft', 'To Submit'),
+    #     ('submitted', 'Submitted'),
+    #     ('approved', 'Approved'),
+    #     ('posted', 'Posted'),
+    #     ('rejected', 'Rejected'),
+    #     ('done', 'Done')
+    # ], track_visibility='onchange', string='Status', default='draft', copy=False, index=True, readonly=True, store=True, help="Expense Status")
     expense_line = fields.One2many('hhexpense.line', string='Expenses Details', inverse_name='expense_id', states={'draft': [('readonly', False)], 'rejected': [('readonly', False)], 'approved': [('readonly', False)]}, readonly=True, help="Expense's detail information")
     reject_reason = fields.Char(string='Reject Reason', readonly=True)
 
@@ -50,7 +57,7 @@ class HHExpense(models.Model):
     approval_time = fields.Char()  # use 'Char' type for ez operation purpose
 
     # ------ Attachments info ------
-    expense_attachment = fields.One2many('hhexpense.attachment', inverse_name='hhexpense',
+    expense_attachment = fields.One2many('ir.attachment', inverse_name='hhexpense',
                                          states={'draft': [('readonly', False)], 'rejected': [('readonly', False)]}, readonly=True)
     # expense_attachment = fields.One2many('ir.attachment', inverse_name='hhexpense')
     confirm_invoice = fields.Boolean(string='Receipt', compute='_compute_invoice', readonly=True, store=True)
@@ -81,8 +88,10 @@ class HHExpense(models.Model):
     # URL needed for email
     to_approve_url = fields.Char()
     approved_url = fields.Char()
+    # to_verify_url = fields.Char()
 
     # ------ Claim for others ------
+    # is_agent = fields.Boolean(default=lambda self: self.env['hhexpense.extra.emp.info'].search([('employee', '=', self.env['hr.employee'].search([('user_id', '=', self.env.uid)], limit=1).name)],limit=1).is_agent, readonly=True, help='True if user set as agent --- allowed to claim expenses on behalf of others')
     claim_as_agent = fields.Boolean(default=False, string='Claim for others', states={'draft': [('readonly', False)], 'rejected': [('readonly', False)]}, readonly=True)
     agent_reimb_id = fields.Many2one('hhexpense.agent.reimbursement', string='Select Staff',
                                      states={'draft': [('readonly', False)], 'rejected': [('readonly', False)]}, readonly=True)
@@ -110,11 +119,53 @@ class HHExpense(models.Model):
                                   default=lambda self: self.env.user.company_id.currency_id)
     address_id = fields.Many2one('res.partner', string="Employee Home Address")
 
+    # company_logo_web = fields.Binary(related='company_id.logo_web')
+    # company_street = fields.Char(related='company_id.street')
+    # company_street2 = fields.Char(related='company_id.street2')
+    # company_city = fields.Char(related='company_id.city')
+    # company_zip = fields.Char(related='company_id.zip')
+    # company_state_id = fields.Many2one(related='company_id.state_id')
+    # company_country_id = fields.Many2one(related='company_id.country_id')
+
     # -------------------------------------------- Define methods here -------------------------------------------------
     @api.onchange('name')
     def testing_only(self):
         resource = self.env['resource.resource'].search([('user_id', '=', self.env.user.id)])
         employee = self.env['hr.employee'].search([('resource_id', '=', resource.id)])
+        print("test: ",
+              self.env.uid,
+              self.env.user.login,
+              self.env['hr.employee'].sudo().search([('user_id', '=', 17)], limit=1).name,
+              resource,
+              employee)
+
+    @api.multi
+    def check_host_env(self):
+        pass
+        """
+        Purpose:
+            For now, this function serve for email test, so that system can dynamically run test / production code
+            in different host, reduce manual changes when doing git action
+        Notes:
+            1. Since:
+                    Test server hostname: odoo-test --> checked on test server (using cmd 'hostname')
+                                                        and socket.gethostname() in python has expected output
+                    VM hostname: davidyao-VirtualBox --> checked on vm
+                                                         and socket.gethostname() in python has expected output
+                We expect this will works too, no longer testing:
+                    Production server hostname: odoo-erp --> checked on production server
+            2. This function needs improvements! it should return a system global variable, not called everytime sending email!
+        """
+        # Production server
+        if socket.gethostname() == 'odoo-erp':
+            is_production_server = True
+        # Test server / David's Linux VM / David's Windows computer
+        elif socket.gethostname() in ['odoo-test', 'davidyao-VirtualBox', 'HKHHD0044', 'HKHHD0025']:
+            is_production_server = False
+        else:
+            raise UserError(_('Either this is a unknown host, or server name has changed. Please contact IT Dep.'))
+
+        return is_production_server
 
     @api.depends('claim_as_agent', 'agent_reimb_id')
     def _compute_expense_belongs_to_employee(self):
@@ -165,20 +216,75 @@ class HHExpense(models.Model):
                 if emp.name == self.env.user.name:
                     rec.employee_department = emp.department_id.name
 
+    # @api.multi
+    # def hhexpense_action_get_attachment_view(self):
+    #     # By now, since we only need "check Guser group" function here, not like "check Acc group" function
+    #     # it is declared as local variable rather than a attribute
+    #     self.ensure_one()
+    #     # if self.state in ['draft', 'rejected']:
+    #     #     res = self.env['ir.actions.act_window'].for_xml_id('hhexpense', 'hhexpense_attachment_action')
+    #     # else:
+    #     #     res = self.env['ir.actions.act_window'].for_xml_id('hhexpense', 'hhexpense_attachment_action_nomodify')
+    #     res = self.env['ir.actions.act_window'].for_xml_id('base', 'action_attachment')
+    #     res['domain'] = [('res_model', '=', 'hhexpense.hhexpense'), ('res_id', 'in', self.ids)]
+    #     res['context'] = {
+    #         'default_res_model': 'hhexpense.hhexpense',
+    #         'default_res_id': self.id,
+    #     }
+    #     for expense in self:
+    #         # If there is no attachment for this expense and it is not a draft expense,
+    #         # user is not allowed to go to the attachment view
+    #         if (self.attachment_num == 0) and (expense.state not in ['draft', 'rejected']):
+    #             if self.is_guser is False:
+    #                 raise UserError(_("There are no attachment for this expense"))
+    #             else:
+    #                 raise UserError(_(
+    #                     "You cannot add any attachment now because the expense is " + self.state + "!"))
+    #         else:
+    #             # checking: if current user is not a guser, can only view attachment
+    #             if (self.is_guser is False) or (expense.state not in ['draft', 'rejected']):
+    #                 # print("current user is not a guser, can only view attachment")
+    #                 res['context'] = {
+    #                     'default_res_model': 'hhexpense.hhexpense',
+    #                     'default_res_id': self.id,
+    #                     'create': False,
+    #                     'edit': False,
+    #                     'delete': False,
+    #                 }
+    #                 return res
+    #             else:
+    #                 # print("do nothing")
+    #                 return res
+
     @api.multi
     def _check_user_in_guser_group(self):
         self.is_guser = True if self.env.user.has_group('hhexpense.group_hhexpense_user') else False
 
     @api.multi
     def _calculate_attachment_num(self):
-        attachment_data = self.env['hhexpense.attachment'].search([])
+        attachment_data = self.env['ir.attachment'].search([])
         for rec in self:
             rec.attachment_num = 0
             for attachment in attachment_data:
                 if attachment.hhexpense.id == rec.id:
                     rec.attachment_num += 1
 
+        #     .read_group(
+        #     [('res_model', '=', 'hhexpense.hhexpense'), ('res_id', 'in', self.ids)], ['res_id'], ['res_id'])
+        # attachment = dict((data['res_id'], data['res_id_count']) for data in attachment_data)
+        # for expense in self:
+        #     expense.attachment_num = attachment.get(expense.id, 0)
+
     # ---------------------------- Calculate summary data of expense line ----------------------------
+    # @api.depends('expense_line')
+    # def _compute_total_amount(self):
+    #     total_amount = 0
+    #     for exp in self:
+    #         for exp_line in exp.expense_line:
+    #             total_amount = total_amount + exp_line.expense_line_cost
+    #
+    #     self.update({'calculate_total_amount': total_amount})
+
     @api.one
     @api.depends('expense_line', 'expense_line.expense_line_cost', 'expense_line.currency_id')
     def _compute_total_amount(self):
@@ -198,23 +304,171 @@ class HHExpense(models.Model):
                 # if any of sub-record choose "Yes", confirm_invoice will be set to True
                 if expense_line_rec.confirm_item_invoice == 1:
                     invoice = True
+                    # print("This expense contains record that require receipt")
         self.update({'confirm_invoice': invoice})
 
     # -------------------------------------- Email --------------------------------------
     @api.multi
     def submit_email(self):
+        # A Gmail can be used for testing: hunghingprintingnotification@gmail.com"
         template = self.env.ref('hhexpense.mail_template_submitted_expense')
+        # is_production_server = self.check_host_env()
+        #
+        # # CC if met condition
+        # # condition booleans below
+        # amt_limit = self.calculate_total_amount >= 3000
+        # emp_dept = self.employee_department == "MARKETING"
+        # if is_production_server:
+        #     # We can define email_to here to avoid git confusion
+        #     # template.email_to = self.emp_extra_info.primary_approver.work_email
+        #     cc_addr = template.email_to != 'christopher.yum@hunghingprinting.com'
+        #     if amt_limit and emp_dept and cc_addr:
+        #         template.email_cc = "christopher.yum@hunghingprinting.com"
+        #     else:
+        #         template.email_cc = ''
+        # else:
+        #     # We can define email_to here to avoid git confusion
+        #     # template.email_to = 'edward.man@hunghingprinting.com'
+        #     cc_addr = template.email_to != 'ailsa.xu@toppwork.com'
+        #     if amt_limit and emp_dept and cc_addr:
+        #         # add cc before send
+        #         # print("match: Marketing, over 3000, not XXX manager, add cc (david.yao@toppwork.com) before send")
+        #         template.email_cc = 'ailsa.xu@toppwork.com'
+        #     else:
+        #         # make sure no cc / clear cc before send
+        #         # print("make sure no cc / clear cc before send")
+        #         template.email_cc = ''
+
         self.env['mail.template'].browse(template.id).send_mail(self.id, force_send=True)
 
     @api.multi
-    def approve_email(self):
+    def approve_email(self, last_write_date):
         template = self.env.ref('hhexpense.mail_template_approved_expense')
+        # is_production_server = self.check_host_env()
+        #
+        # if is_production_server:
+        #     cc_condition = datetime.datetime.now() - datetime.timedelta(days=3)
+        #     format_last_write_date = datetime.datetime.strptime(last_write_date, "%Y-%m-%d %H:%M:%S")
+        #     # cc if met condition
+        #     if format_last_write_date < cc_condition:
+        #         template.email_cc = self.emp_extra_info.primary_approver.work_email + \
+        #                             (', ' + self.emp_extra_info.backup_approver.work_email
+        #                              if self.emp_extra_info.backup_approver else '')
+        #     else:
+        #         template.email_cc = ''
+        # else:
+        #     cc_condition = datetime.datetime.now() - datetime.timedelta(days=1)
+        #     format_last_write_date = datetime.datetime.strptime(last_write_date, "%Y-%m-%d %H:%M:%S")
+        #     if format_last_write_date < cc_condition:
+        #         # Met condition --- 1 days before, no cc
+        #         template.email_cc = ''
+        #     else:
+        #         # Doesn't met condition --- within 1 day, add cc for testing
+        #         # (david.yao@toppwork.com & edward.man@hunghingprinting.com if has backup_approver)
+        #         template.email_cc = 'david.yao@toppwork.com' + \
+        #                             (', ' + 'edward.man@hunghingprinting.com'
+        #                              if self.emp_extra_info.backup_approver else '')
+
         self.env['mail.template'].browse(template.id).send_mail(self.id, force_send=True)
 
     @api.multi
-    def reject_email(self):
+    def reject_email(self, last_write_date):
         template = self.env.ref('hhexpense.mail_template_reject_expense')
+        # is_production_server = self.check_host_env()
+        #
+        # if is_production_server:
+        #     add_cc_condition = datetime.datetime.now() - datetime.timedelta(days=3)
+        #     format_write_date = datetime.datetime.strptime(last_write_date, "%Y-%m-%d %H:%M:%S")
+        #     # CC if met condition
+        #     if not self.is_reviewer_reject and format_write_date < add_cc_condition:
+        #         template.email_cc = self.emp_extra_info.primary_approver.work_email + \
+        #                             (', ' + self.emp_extra_info.backup_approver.work_email
+        #                              if self.emp_extra_info.backup_approver else '')
+        #     else:
+        #         template.email_cc = ''
+        # else:
+        #     add_cc_condition = datetime.datetime.now() - datetime.timedelta(days=1)
+        #     format_write_date = datetime.datetime.strptime(last_write_date, "%Y-%m-%d %H:%M:%S")
+        #
+        #     if not self.is_reviewer_reject and format_write_date < add_cc_condition:
+        #         template.email_cc = ''
+        #     else:
+        #         template.email_cc = 'david.yao@toppwork.com' + \
+        #                             (', ' + 'edward.man@hunghingprinting.com'
+        #                              if self.emp_extra_info.backup_approver else '')
+
         self.env['mail.template'].browse(template.id).send_mail(self.id, force_send=True)
+
+    # @api.multi
+    # def reminder_email(self):
+    #     """
+    #     Purpose:
+    #         Check all expenses record to determine when to send reminder email
+    #     Notes:
+    #         1. datetime result is without UTC time --- not HK time
+    #         2. Logic for determine who should get notified.
+    #             Assumption: one primary manager either have backup manager or no backup manager, no "some cases"
+    #             Case sample: Manager A has 5 expenses to approve, manager B has 7, then only send 2 email out,
+    #                          not 5 + 7 = 12 email, one for A and one for B
+    #             --------------------------------------------------------------------------------------------------------
+    #             submitted expenses      write date (3 days)      find out manager info          Send out correspondingly
+    #             --------------------------------------------------------------------------------------------------------
+    #             submitted_expense_1  --->      Pass
+    #             submitted_expense_2  --->      Pass
+    #             submitted_expense_3  --->      Match    --->  primary manager A and backup manager C
+    #             submitted_expense_4  --->      Match    --->  primary manager A and backup manager C
+    #             submitted_expense_5  --->      Match    --->  primary manager B
+    #             submitted_expense_6  --->      Match    --->  primary manager B
+    #             submitted_expense_7  --->      Pass
+    #             --------------------------------------------------------------------------------------------------------
+    #             Result: One email to manager A with CC backup approver, another email to manager B without CC
+    #             --------------------------------------------------------------------------------------------------------
+    #     """
+    #     submitted_expenses = self.env['hhexpense.hhexpense'].search([('state', '=', 'submitted')])
+    #     is_production_server = self.check_host_env()
+    #
+    #     if is_production_server:
+    #         if submitted_expenses:
+    #             resend_condition = datetime.datetime.now() - datetime.timedelta(days=3)
+    #             template = self.env.ref('hhexpense.mail_template_to_approve_reminder')
+    #             manager_sended_list = []
+    #             for expense in submitted_expenses:
+    #                 format_write_date = datetime.datetime.strptime(expense.write_date, "%Y-%m-%d %H:%M:%S")
+    #                 # Expense's last modify date is 3 days before
+    #                 if format_write_date < resend_condition:
+    #                     #  If this primary manager has already receive reminder email, no needs to send another one
+    #                     if expense.emp_extra_info.primary_approver.name not in manager_sended_list:
+    #                         manager_sended_list.append(expense.emp_extra_info.primary_approver.name)
+    #                         # CC backup approver if exist
+    #                         if expense.emp_extra_info.backup_approver:
+    #                             template.email_cc = expense.emp_extra_info.backup_approver.work_email
+    #                         else:
+    #                             template.email_cc = ''
+    #                         self.env['mail.template'].browse(template.id).send_mail(expense.id, force_send=True)
+    #                 # Expense's last modify date is within 3 days
+    #                 else:
+    #                     pass
+    #     else:
+    #         if submitted_expenses:
+    #             resend_condition = datetime.datetime.now() - datetime.timedelta(days=1)
+    #             template = self.env.ref('hhexpense.mail_template_to_approve_reminder')
+    #             manager_sended_list = []
+    #             for expense in submitted_expenses:
+    #                 format_write_date = datetime.datetime.strptime(expense.write_date, "%Y-%m-%d %H:%M:%S")
+    #                 # Expense's last modify date is 1 days before
+    #                 if format_write_date < resend_condition:
+    #                     pass
+    #                 # Expense's last modify date is within 1 days
+    #                 else:
+    #                     # If this primary manager has already receive reminder email, no needs to send another one
+    #                     if expense.emp_extra_info.primary_approver.name not in manager_sended_list:
+    #                         manager_sended_list.append(expense.emp_extra_info.primary_approver.name)
+    #                         # CC backup approver if exist
+    #                         if expense.emp_extra_info.backup_approver:
+    #                             template.email_cc = 'david.yao@toppwork.com'
+    #                         else:
+    #                             template.email_cc = ''
+    #                         self.env['mail.template'].browse(template.id).send_mail(expense.id, force_send=True)
 
     @api.multi
     def get_url_email_link(self):
@@ -232,6 +486,18 @@ class HHExpense(models.Model):
             else:
                 pass
 
+    @api.multi
+    def get_url_for_reminder(self):
+        """
+        Notes:
+            This function is called from email template (name: 'hhexpense - Reminder')
+        """
+        menu_id = self.env['ir.ui.menu'].search([('name', '=', 'E-Expense(HH)')]).id
+        action_id = self.env['ir.actions.act_window'].search([('name', '=', 'Expenses to Approve')]).id
+        url = f'http://smart.hunghingprinting.com/web#view_type=list&model=hhexpense.hhexpense&' \
+              f'action={action_id}&menu_id={menu_id}'
+        return url
+
     # -------------------------------------- Email --------------------------------------
     def hhexpense_post_message(self, state):
         if state == 'submit':
@@ -240,6 +506,7 @@ class HHExpense(models.Model):
             if not manager_user_id:
                 # raise error
                 raise UserError(_('Please define your department manager in Employee module first'))
+                print('please define your department manager in Employee module first')
             else:
                 partner_id = manager_user_id.partner_id.id
                 notification = _(
@@ -275,6 +542,41 @@ class HHExpense(models.Model):
             notification = _(
                 '<div class="o_mail_notification"><strong>Test</strong></div>')
             subject = 'Test.'
+        # 1.success send without module icon and redirect function
+        # ============create channel between current user and corresponding dept manager================================
+        # manager_user_id = self.employee_id.parent_id.resource_id.user_id
+        # if manager_user_id:
+        #     partners = []
+        #     partners.append(self.env.user.partner_id.id)
+        #
+        #     manager_partner_id = manager_user_id.partner_id.id
+        #     partners.append(manager_partner_id)
+        #     # check whether there already exist channel for user and manager
+        #     manager_channels = self.env['mail.channel.partner'].search([('partner_id', '=', manager_partner_id)])
+        #     user_channels = self.env['mail.channel.partner'].search([('partner_id', '=', self.env.user.partner_id.id)])
+        #     print('hahaha')
+        # new_channel = False
+        # for manager_ch in manager_channels:
+        #     for user_ch in user_channels:
+        #         if user_ch.channel_id == manager_ch.channel_id:
+        #             if self.env['mail.channel'].search([('id', '=', user_ch.channel_id.id)]).public == 'private':
+        #                 new_channel = user_ch.channel_id
+        # if not new_channel:
+        #     new_channel = self.env['mail.channel'].create({
+        #         'name': 'E-Expense for ' + self.env.user.name + ' & ' + str(self.employee_id.parent_id.name),
+        #         'public': 'private',
+        #         'email_send': False,
+        #         'channel_partner_ids': [(4, pid) for pid in partners],
+        #     })
+            # print(new_channel)
+        #==============================================================================================================
+        # new_channel.message_post(body=notification, message_type="comment", subtype="mail.mt_comment")
+
+        # 2.post message through self --> only display on expense sidebar chatter rather than system channel list
+        # self.message_post(body=notification, message_type="comment", subtype="mail.mt_comment")
+        # new_channel.message_post(message_type="notification", subtype="hhexpense.mt_hhexpense_confirmed", parent_id=manager_partner_id)
+
+        # 3.directly create mail.message --> finally success
         self.env['mail.message'].create({'message_type': "notification",
                                          "subtype": self.env.ref("mail.mt_comment").id,
                                          'body': notification,
@@ -284,6 +586,7 @@ class HHExpense(models.Model):
                                          'res_id': self.id,
                                          'author_id': self.env.user.partner_id.id,
                                          })
+        print('message posted for ', state)
 
     # ------------------------------------- Header Button Action -------------------------------------
     @api.multi
@@ -305,19 +608,25 @@ class HHExpense(models.Model):
         self.submit_email()
         self.hhexpense_post_message('submit')
 
+        # return
+
     @api.multi
     def approve_expense(self):
+        last_write_date = self.write_date
+
         self.with_context(tracking_disable=False).state = 'approved'  # this also work --> self.write({'state': 'approved'})
         self.rec_approver_name = self.env.user.name
         self.approval_time = datetime.datetime.now().strftime('%Y/%m/%d - %H:%M:%S:%f')
-        self.approve_email()
+        self.approve_email(last_write_date)
         self.hhexpense_post_message('approve')
 
     @api.multi
     def reject_expense(self, reason):
+        last_write_date = self.write_date
+
         self.reject_reason = reason
         self.state = 'rejected'
-        self.reject_email()
+        self.reject_email(last_write_date)
         self.hhexpense_post_message('reject')
         return
 
@@ -335,6 +644,19 @@ class HHExpense(models.Model):
         return sheet
 
     # --------------------------------------- Discuss Chatter Box ------------------------------------
+    # @api.multi
+    # def _track_subtype(self, init_values):
+    #     self.ensure_one()
+    #     if 'state' in init_values and self.state == 'approve':
+    #         return 'hhexpense.mt_hhexpense_approved'
+    #     elif 'state' in init_values and self.state == 'submitted':
+    #         return 'hhexpense.mt_hhexpense_confirmed'
+    #     elif 'state' in init_values and self.state == 'cancel':
+    #         return 'hhexpense.mt_hhexpense_refused'
+    #     elif 'state' in init_values and self.state == 'done':
+    #         return 'hhexpense.mt_hhexpense_paid'
+    #     return super(HHExpense, self)._track_subtype(init_values)
+
     @api.model
     def message_new(self, msg_dict, custom_values=None):
         if custom_values is None:
@@ -391,6 +713,27 @@ class HHExpense(models.Model):
         })
         return super(HHExpense, self).message_new(msg_dict, custom_values)
 
+    # --------------------------------------- Attachment  ---------------------------------------------
+    @api.multi
+    def create_ir_attachment(self, values):
+        self.ensure_one()
+        view_ref = self.env.ref('hhexpense.hhexpense_view_document_file_form').id
+        # print(view_ref)
+        return {
+            'type': 'ir.actions.act_window',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'view_id': view_ref,
+            'res_model': 'ir.attachment',
+            'res_id': self.id,
+            'target': 'new',
+            # 'hide_footer': True
+            'context': {
+                'default_res_model': 'ir.attachment',
+                'default_res_id': self.id,
+            }
+        }
+
     # --------------------------------------- Accounting ----------------------------------------------
     @api.multi
     def action_sheet_move_create(self):
@@ -434,13 +777,18 @@ class HHExpenseLine(models.Model):
     expense_line_name = fields.Char(string="Description", states={'draft': [('readonly', False)], 'rejected': [('readonly', False)]}, required=True, readonly=True)
     expense_line_cost = fields.Float(string='Amount', states={'draft': [('readonly', False)], 'rejected': [('readonly', False)]}, readonly=True)
     expense_line_date = fields.Date(string="Expense Date", states={'draft': [('readonly', False)], 'rejected': [('readonly', False)]}, required=True, readonly=True)
+    # Currency field should integrate into odoo, just like odoo!
+    # expense_line_currency = fields.Selection([('rmb', 'CNY'), ('hkd', 'HKD')], string='Currency', states={'draft': [('readonly', False)], 'rejected': [('readonly', False)]}, required=True, readonly=True)
     expense_line_belongs_to_employee = fields.Char(string="Belongs to", compute='_compute_expense_line_belongs_to_employee', store=True)
     confirm_item_invoice = fields.Selection([(1, 'YES'), (0, 'NO')], string='Receipt', states={'draft': [('readonly', False)], 'rejected': [('readonly', False)]}, readonly=True, required=True, store=True)
     state = fields.Char(string="Status", compute="_compute_state", store=True)
     state_display_name = fields.Char(string="Status", compute="_compute_state_display_name", store=True)
     employee_name = fields.Char(related="expense_id.employee_name", store=True)
     expense_id = fields.Many2one('hhexpense.hhexpense', ondelete='cascade')
+    # expense_category = fields.Many2one('product.product', string='Product Category')
+    # expense_cate_id = fields.Many2one('hhexpense.expense.category', ondelete='set null', string='Category', states={'draft': [('readonly', False)], 'rejected': [('readonly', False)]}, required=True, readonly=True)
     expense_num_copy = fields.Char(related='expense_id.expense_num', store=True)
+
     payment_mode = fields.Selection([
         ("own_account", "Employee (to reimburse)"),
         ("company_account", "Company")
@@ -458,6 +806,7 @@ class HHExpenseLine(models.Model):
                                  states={'draft': [('readonly', False)], 'refused': [('readonly', False)]},
                                  domain=[('can_be_hhexpensed', '=', True)], required=True)
     date = fields.Date(readonly=True, states={'draft': [('readonly', False)], 'refused': [('readonly', False)]}, default=fields.Date.context_today, string="Date")
+    # name = fields.Char(string='Expense Description', readonly=True, required=True, states={'draft': [('readonly', False)], 'refused': [('readonly', False)]})
     employee_id = fields.Many2one('hr.employee', string="Employee", required=True, readonly=True, states={'draft': [('readonly', False)], 'refused': [('readonly', False)]}, default=lambda self: self.env['hr.employee'].search([('user_id', '=', self.env.uid)], limit=1))
     analytic_account_id = fields.Many2one('account.analytic.account', string='Analytic Account', states={'posted': [('readonly', True)], 'done': [('readonly', True)]}, oldname='analytic_account')
     tax_ids = fields.Many2many('account.tax', 'hhexpense_tax', 'hhexpense_expense_id', 'tax_id', string='Taxes', states={'done': [('readonly', True)], 'posted': [('readonly', True)]})
@@ -523,6 +872,8 @@ class HHExpenseLine(models.Model):
             user_input_int = int(''.join(char for char in user_input if char.isalnum()))
             today = int(datetime.datetime.now().strftime('%Y%m%d'))
             if user_input_int > today:
+                # print("[This message is come from 'hhexpense.py'] dude, srs? you think expense date will later than "
+                #       "today?")
                 self.expense_line_date = 0
                 today_date = datetime.datetime.now().strftime('%Y-%m-%d')
                 return {
@@ -709,10 +1060,12 @@ class HHExpenseLine(models.Model):
             'name': aml_name,
             'price_unit': self.unit_amount,
             'quantity': self.quantity,
+            # 'price': self.total_amount,
             'price': self.expense_line_cost,
             'account_id': account.id,
             'product_id': self.product_id.id,
             'uom_id': self.product_uom_id.id,
+            # 'uom_id': '',
             'analytic_account_id': self.analytic_account_id.id,
             'hhexpense_expense_id': self.id,
         }
