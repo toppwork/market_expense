@@ -1,6 +1,84 @@
 <?xml version="1.0"?>
 <odoo>
     <data>
+        <!--<record id="expense_view_document_file_kanban" model="ir.ui.view">-->
+            <!--<field name="name">hhexpense.hhexpense.kanban</field>-->
+            <!--<field name="model">ir.attachment</field>-->
+            <!--<field name="inherit_id" ref="mail.view_document_file_kanban"/>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<xpath expr="//kanban" position='attributes'>-->
+                    <!--<attribute name="import">false</attribute>-->
+                <!--</xpath>-->
+                <!--<xpath expr="/kanban/templates/t/div" position="replace">-->
+                    <!--<div class="oe_kanban_vignette">-->
+                        <!--<div class="oe_attachment">-->
+                            <!--<div class="oe_name" style="font-size:20px; overflow:hidden;">-->
+                                <!--<field name="name"/>-->
+                                <!--<field name="state" invisible="1"/>-->
+                                <!--<field name="datas_fname" invisible="1"/>-->
+                                <!--<field name="is_guser" invisible="1"/>-->
+                            <!--</div>-->
+                                <!--<div t-if="record.type.raw_value == 'binary'" style="margin-left: 23%;">-->
+                                    <!--<t t-set="type" t-value="record.mimetype.value.split('/').shift()"/>-->
+                                    <!--<div t-attf-class="o_attachment" title="Double click to open the file">-->
+                                        <!--&lt;!&ndash;<html>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<head>&ndash;&gt;-->
+                                            <!--&lt;!&ndash;<script type="text/javascript" src="/hhexpense/static/src/js/attachment.js"></script>&ndash;&gt;-->
+                                            <!--&lt;!&ndash;<link rel="stylesheet" href="/hhexpense/static/src/css/attachment.css"/>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;</head>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<body>&ndash;&gt;-->
+                                        <!--<t t-if="type == 'image'">-->
+                                            <!--<div class="o_image_box">-->
+                                                <!--<img t-attf-src="/web/image/#{record.id.raw_value}" class="file_img"-->
+                                                     <!--ondblclick="_onAttachmentViewImg(this);"/>-->
+                                                <!--<a class="my_attachment_download"  t-attf-class="o_form_uri o_field_widget"-->
+                                                   <!--t-attf-href="/web/content/#{record.id.raw_value}?download=1" target="_blank" >-->
+                                                    <!--<img src="/hhexpense/static/src/img/download.png"-->
+                                                         <!--title="Download this attachment" aria-hidden="true"></img>-->
+                                                <!--</a>-->
+
+                                                <!--<a type="delete" class='my_attachment_delete'-->
+                                                   <!--attrs="{'invisible':['|',('is_guser','=',False),('state', 'not in' , ['draft', 'rejected'])]}">-->
+                                                    <!--<img src="/hhexpense/static/src/img/delete.png" title="Delete this attachment" aria-hidden="true"></img>-->
+                                                <!--</a>-->
+                                            <!--</div>-->
+                                        <!--</t>-->
+                                        <!--<t t-if="record.mimetype.value == 'application/pdf'">-->
+                                            <!--<div class="o_image_box">-->
+                                                <!--<img t-attf-src="/web/static/src/img/mimetypes/pdf.png" class="file_img"-->
+                                                     <!--ondblclick="_onAttachmentViewPdf(this);" />-->
+                                                <!--<a class="my_attachment_download" t-attf-href="/web/content/#{record.id.raw_value}?download=1" target="_blank" >-->
+                                                    <!--<img src="/hhexpense/static/src/img/download.png"-->
+                                                         <!--title="Download this attachment"-->
+                                                         <!--aria-hidden="true"></img>-->
+                                                <!--</a>-->
+                                                <!--<a type="delete" class='my_attachment_delete'-->
+                                                   <!--attrs="{'invisible':['|',('is_guser','=',False),('state', 'not in' , ['draft', 'rejected'])]}">-->
+                                                    <!--<img src="/hhexpense/static/src/img/delete.png" title="Delete this attachment" aria-hidden="true"></img>-->
+                                                <!--</a>-->
+                                            <!--</div>-->
+                                        <!--</t>-->
+                                        <!--&lt;!&ndash;</body>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;</html>&ndash;&gt;-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</xpath>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--<record id="view_document_file_form" model="ir.ui.view" >-->
+            <!--<field name="name">hhexpense.hhexpense.form</field>-->
+            <!--<field name="model">ir.attachment</field>-->
+            <!--<field name="inherit_id" ref="base.view_attachment_form"/>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<xpath expr="//field[@name='type']" position="attributes">-->
+                   <!--<attribute name="invisible">1</attribute>-->
+                <!--</xpath>-->
+            <!--</field>-->
+        <!--</record>-->
+
         <record id="hhexpense_view_document_file_form" model="ir.ui.view" >
             <field name="name">hhexpense.attachment.form</field>
             <field name="model">hhexpense.attachment</field>
@@ -20,6 +98,22 @@
             <field name="name">Receipt Attachments</field>
             <field name="res_model">hhexpense.attachment</field>
             <field name="view_mode">kanban,form</field>
+            <!--<field name="domain">[('res_model', '=', 'hhexpense.hhexpense'),('res_id', '=', active_id)]</field>-->
         </record>
+
+        <!--<record id="expense_attachment_view_specification_kanban" model="ir.actions.act_window.view">-->
+            <!--<field name="sequence" eval="1"/>-->
+            <!--<field name="view_mode">kanban</field>-->
+            <!--<field name="view_id" ref="expense_view_document_file_kanban"/>-->
+            <!--<field name="act_window_id" ref="base.action_attachment"/>-->
+        <!--</record>-->
+
+        <!--<record id="expense_attachment_view_specification_form" model="ir.actions.act_window.view">-->
+            <!--<field name="sequence" eval="2"/>-->
+            <!--<field name="view_mode">form</field>-->
+            <!--<field name="view_id" ref="hhexpense_view_document_file_form"/>-->
+            <!--<field name="act_window_id" ref="hhexpense_attachment_action_attachment"/>-->
+        <!--</record>-->
+
     </data>
 </odoo>

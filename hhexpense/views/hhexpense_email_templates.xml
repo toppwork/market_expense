@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
+    <data> <!--  noupdate="1"-->
+        <!--
+            Self learning:
+                1. If you write: 'ailsa.xu@hunghingprinting.com' on 'email_to',
+                        Gmail can recognizes it (receive email),
+                        Hunghing mail server cannot (can not receive email)
+                2. Image source:
+                        https://image.ibb.co/dbUXzz/logo.png - OR - http://www.hunghingprinting.com/img/emailPic.png
+                3. Set preheader (email preview):
+                        <div style="display: none;">
+                            preheader contents you want show
+                        </div>
+                        <div>
+                            real contents you want show
+                        </div>
+        -->
         <!-- user case 1 -->
         <record id="mail_template_submitted_expense" model="mail.template">
             <field name="name">hhexpense - Submit expense</field>
@@ -8,11 +23,14 @@
             <field name="auto_delete" eval="False"/>
             <field name="email_from">${(object.company_id and object.company_id.email or '') | safe}</field>
             <field name="email_to">${object.employee_id.parent_id.work_email | safe}</field>
+            <!--<field name="email_to">ailsa.xu@hunghingprinting.com</field>-->
             <field name="subject">${(object.employee_name)} has submitted an expense</field>
             <field name="lang">${object.lang}</field>
             <field name="body_html">
                 <![CDATA[
                     <head>
+                        <!--<img src="http://www.hunghingprinting.com/img/emailPic.png"/>-->
+                        <!--<img src="data:image/png;base64,${object.company_id.logo}" style="width: 250px;" alt='Company Logo'/>-->
                         <img src="/logo.png" style="padding: 0px; margin: 0px; height: auto; width: 250px;" alt="${user.company_id.name}">
 
                     </head>
@@ -49,11 +67,13 @@
             <field name="auto_delete" eval="False"/>
             <field name="email_from">${(object.company_id and object.company_id.email or '') | safe}</field>
             <field name="email_to">${(object.employee_id.work_email) | safe}</field>
+            <!--<field name="email_to">ailsa.xu@hunghingprinting.com</field>-->
             <field name="subject">Your expense "${(object.name)}" has been Approved</field>
             <field name="lang">${object.lang}</field>
             <field name="body_html">
                 <![CDATA[
                     <head>
+                        <!--<img src="http://www.hunghingprinting.com/img/emailPic.png"/>-->
                         <img src="/logo.png" style="padding: 0px; margin: 0px; height: auto; width: 250px;" alt="${user.company_id.name}">
                     </head>
                     <body>
@@ -79,18 +99,63 @@
             </field>
         </record>
 
+        <!-- user case 6 -->
+        <record id="mail_template_paid_expense" model="mail.template">
+            <field name="name">hhexpense - Paid expense</field>
+            <field name="model_id" ref="hhexpense.model_hhexpense_hhexpense"/>
+            <field name="auto_delete" eval="False"/>
+            <field name="email_from">${(object.company_id and object.company_id.email or '') | safe}</field>
+            <!--<field name="email_to">${(object.employee_id.work_email) | safe}</field>-->
+            <field name="email_to">ailsa.xu@hunghingprinting.com</field>
+            <field name="subject">Your expense "${object.name}" has been paid</field>
+            <field name="lang">${object.lang}</field>
+            <field name="body_html">
+                <![CDATA[
+                    <head>
+                        <!--<img src="http://www.hunghingprinting.com/img/emailPic.png"/>-->
+                        <img src="/logo.png" style="padding: 0px; margin: 0px; height: auto; width: 250px;" alt="${user.company_id.name}">
+                    </head>
+                    <body>
+                        <div>
+                            <hr>
+                            <p>Dear ${object.employee_name},</p>
+                            <p>Your expense:</p>
+                            <p><strong>"${object.name}"</strong></p>
+                            <p>has been <strong>PAID</strong> on <strong>${object.payment_approved_date}</strong>,
+                            please check your bank account.</p>
+                            <p>You may also wish to <a href=${object.approved_url}>login</a> to the e-Expense system
+                            to check the details.</p>
+                            <p>Thank you for your attention.</p>
+                            <br/>
+                            <hr>
+                        </div>
+                    </body>
+                    <footer>
+                        <div style="font-size:13px; color:#999999;">
+                            * This is a system-generated message, please do not reply. For enquiries, contact
+                            ${(object.expense_belongs_to_company.primary_reviewer_name)}
+                            (${object.expense_belongs_to_company.primary_reviewer.work_email})
+                            / ext.${(object.expense_belongs_to_company.primary_reviewer_ext)}
+                        </div>
+                    </footer>
+                ]]>
+            </field>
+        </record>
+
         <!-- user case 3 & 4 -->
         <record id="mail_template_reject_expense" model="mail.template">
             <field name="name">hhexpense - Reject expense</field>
             <field name="model_id" ref="hhexpense.model_hhexpense_hhexpense"/>
             <field name="auto_delete" eval="False"/>
             <field name="email_from">${(object.company_id and object.company_id.email or '') | safe}</field>
-            <field name="email_to">${(object.employee_id.work_email) | safe}</field>
+            <!--<field name="email_to">${(object.employee_id.work_email) | safe}</field>-->
+            <field name="email_to">ailsa.xu@hunghingprinting.com</field>
             <field name="subject">Your expense "${object.name}" has been rejected</field>
             <field name="lang">${object.lang}</field>
             <field name="body_html">
                 <![CDATA[
                     <head>
+                        <!--<img src="http://www.hunghingprinting.com/img/emailPic.png"/>-->
                         <img src="/logo.png" style="padding: 0px; margin: 0px; height: auto; width: 250px;" alt="${user.company_id.name}">
                     </head>
                     <body>
@@ -117,6 +182,44 @@
                 ]]>
             </field>
         </record>
+
+        <!-- reminder email -->
+        <record id="mail_template_to_approve_reminder" model="mail.template">
+            <field name="name">hhexpense - Reminder</field>
+            <field name="model_id" ref="hhexpense.model_hhexpense_hhexpense"/>
+            <field name="auto_delete" eval="False"/>
+            <field name="email_from">${(object.company_id and object.company_id.email or '') | safe}</field>
+            <!--<field name="email_to">${object.emp_extra_info.primary_approver.work_email | safe}</field>-->
+            <field name="email_to">ailsa.xu@hunghingprinting.com</field>
+            <field name="subject">Expenses are waiting for your approval</field>
+            <field name="lang">${object.lang}</field>
+            <field name="body_html">
+                <![CDATA[
+                    <head>
+                        <!--<img src="http://www.hunghingprinting.com/img/emailPic.png"/>-->
+                        <img src="/logo.png" style="padding: 0px; margin: 0px; height: auto; width: 250px;" alt="${user.company_id.name}">
+                    </head>
+                    <body>
+                        <div>
+                            <hr>
+                            <p>Dear manager,</p>
+                            <p>Please be noted that expenses are still waiting for your approval.</p>
+                            <p>Please <a href=${object.get_url_for_reminder()}>login</a> to the e-Expense system to view the details.</p>
+                            <p>Thank you for your attention.</p>
+                            <br/>
+                            <hr>
+                        </div>
+                    </body>
+                    <footer>
+                        <div style="font-size:13px; color:#999999;">
+                            * This is a system-generated message, please do not reply. For enquiries, contact
+                            XXX (XXX's Email) / ext.(phone number) --- reminder email
+                        </div>
+                    </footer>
+                ]]>
+            </field>
+        </record>
+
     </data>
 </odoo>
 
