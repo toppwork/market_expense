@@ -10,11 +10,6 @@ access_hhexpense_line_manager,hhexpense.line.manager,model_hhexpense_line,hhexpe
 access_hhexpense_line_accountant,hhexpense.line.accountant,model_hhexpense_line,hhexpense.group_hhexpense_accountant,1,1,0,0
 access_hhexpense_line_admin,hhexpense.line.admin,model_hhexpense_line,hhexpense.group_hhexpense_admin,1,1,0,0
 
-access_hhexpense_attachment_user,hhexpense.attachment.user,model_hhexpense_attachment,hhexpense.group_hhexpense_user,1,1,1,1
-access_hhexpense_attachment_manager,hhexpense.attachment.manager,model_hhexpense_attachment,hhexpense.group_hhexpense_manager,1,1,0,0
-access_hhexpense_attachment_accountant,hhexpense.attachment.accountant,model_hhexpense_attachment,hhexpense.group_hhexpense_accountant,1,1,0,0
-access_hhexpense_attachment_admin,hhexpense.attachment.admin,model_hhexpense_attachment,hhexpense.group_hhexpense_admin,1,1,0,0
-
 access_account_move_line_hhexpense_user,account.move.line.hhexpense.user,account.model_account_move_line,hhexpense.group_hhexpense_user,1,1,1,1
 access_account_move_line_hhexpense_manager,account.move.line.hhexpense.manager,account.model_account_move_line,hhexpense.group_hhexpense_manager,1,1,1,1
 access_account_move_line_hhexpense_accountant,account.move.line.hhexpense.accountant,account.model_account_move_line,hhexpense.group_hhexpense_accountant,1,1,1,1
